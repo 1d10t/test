@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sphinx:docset>
+
+	<sphinx:schema>
+		<sphinx:attr name="id"/>
+		<sphinx:attr name="area_value" type="float"/>
+		<sphinx:field name="cn"/>
+		<sphinx:field name="address"/>
+		<sphinx:field name="util"/>
+	</sphinx:schema>
+
+	<sphinx:document id="2325040200112" area_value="2000.0">
+		<cn>23:25:0402001:12</cn>
+		<address>Краснодарский край, р-н Приморско-Ахтарский, х им.Тамаровского, с/о Бриньковский, ул Победы, д 13</address>
+	</sphinx:document>
+
+
+	<sphinx:killlist>
+		<!-- <id>1234</id> -->
+	</sphinx:killlist>
+
+</sphinx:docset>

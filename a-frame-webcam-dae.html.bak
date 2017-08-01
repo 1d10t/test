@@ -5,7 +5,7 @@
 <script>THREEx.ArToolkitContext.baseURL = 'https://jeromeetienne.github.io/AR.js/three.js/'</script -->
 </head>
 <body style='margin : 0px; overflow: hidden;'>
-	<a-scene antialias="true" embedded artoolkit='sourceType: webcam;'>
+	<a-scene embedded artoolkit='sourceType: webcam;'>
 		
 		<!--
 		<a-box position='0 0 0.5' material='opacity: 0.5;'></a-box>

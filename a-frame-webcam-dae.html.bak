@@ -13,7 +13,7 @@
 		-->
 		
 		<a-assets>
-			<a-asset-item id="fence" src="fence.dae"></a-asset-item>
+			<a-asset-item id="fence" src="fence1.dae"></a-asset-item>
 		</a-assets>
 		
 		<a-entity collada-model="#fence"></a-entity>

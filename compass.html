@@ -1,0 +1,29 @@
+<html><head>
+<script src="//ai.github.io/compass.js/compass.js"></script>
+<script>
+window.onload = function(){
+	Compass.noSupport(function () {
+	  compass.style.display="none";
+	});
+	
+	Compass.needGPS(function () {
+	  go_outside_message.style.display="block";          // Step 1: we need GPS signal
+	}).needMove(function () {
+	  go_outside_message.style.display="none";
+	  move_and_hold_ahead_message.style.display="block"; // Step 2: user must go forward
+	}).init(function () {
+	  move_and_hold_ahead_message.style.display="none"; // GPS hack is enabled
+	});
+	
+	Compass.watch(function (heading) {
+	  degrees.innerText = heading;
+	  compass.style.transform = 'rotate(' + (-heading) + 'deg)';
+	});
+}
+</script>
+</head><body>
+<div id="compass" style="display: none;">compass</div>
+<div id="go_outside_message" style="display: block;">go-outside-message</div>
+<div id="move_and_hold_ahead_message" style="display: none;">move-and-hold-ahead-message</div>
+<div id="degrees">degrees</div>
+</body></html>

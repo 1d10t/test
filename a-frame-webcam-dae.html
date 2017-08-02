@@ -17,6 +17,7 @@ AFRAME.registerComponent('transparent-texture', {
   applyToMesh: function() {
     const mesh = this.el.getObject3D('mesh');
     if (mesh) {
+		console.log(mesh);
       mesh.material.transparent = true;
     }
   },

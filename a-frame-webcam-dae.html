@@ -25,10 +25,11 @@ AFRAME.registerComponent('transparent-texture', {
 					//console.log('child mesh', child);
 					child.material.transparent = true;
 					child.material.side = THREE.DoubleSide;
-					child.material.needsUpdate = true;
 					child.material.depthTest = true;
-					//child.material.alphaTest = true;
+					child.material.depthWrite = true;
+					//renderDepth
 					
+					child.material.needsUpdate = true;
 				}
 			})
 			

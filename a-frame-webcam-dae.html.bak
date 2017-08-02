@@ -27,6 +27,7 @@ AFRAME.registerComponent('transparent-texture', {
 					child.material.side = THREE.DoubleSide;
 					child.material.depthTest = true;
 					child.material.depthWrite = true;
+					//renderDepth
 					
 					child.material.needsUpdate = true;
 				}

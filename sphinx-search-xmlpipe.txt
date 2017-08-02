@@ -6,12 +6,13 @@
 		<sphinx:attr name="area_value" type="float"/>
 		<sphinx:field name="cn"/>
 		<sphinx:field name="address"/>
-		<sphinx:field name="util"/>
+		<sphinx:field name="util"/> <!-- util_by_doc + map_dic.json/utilDescription[util] -->
 	</sphinx:schema>
 
 	<sphinx:document id="2325040200112" area_value="2000.0">
 		<cn>23:25:0402001:12</cn>
 		<address>Краснодарский край, р-н Приморско-Ахтарский, х им.Тамаровского, с/о Бриньковский, ул Победы, д 13</address>
+		<util>Для ведения личного подсобного хозяйства / Для ведения личного подсобного хозяйства</util>
 	</sphinx:document>
 
 

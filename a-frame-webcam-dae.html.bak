@@ -8,20 +8,29 @@ AFRAME.registerComponent('transparent-texture', {
 	schema: {
 		// Add properties.
 	},
-
+	
 	init: function () {
 		this.applyToMesh();
 		this.el.addEventListener('model-loaded', () => this.applyToMesh());
 	},
-
+	
 	applyToMesh: function() {
 		const mesh = this.el.getObject3D('mesh');
 		if (mesh) {
-			console.log(mesh.material);
-			mesh.material.transparent = true;
+			
+			mesh.traverse( function( child ) 
+			{
+				if ( child.isMesh )
+				{   
+					console.log(child);
+				}
+			})
+			
+		//	console.log(mesh.material);
+		//	mesh.material.transparent = true;
 		}
 	},
-
+	
 	update: function () {
 		// Update `this.material`.
 	}

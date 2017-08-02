@@ -24,7 +24,7 @@ AFRAME.registerComponent('transparent-texture', {
 				{   
 					//console.log('child mesh', child);
 					child.material.transparent = true;
-					child.material.side = THREE.Front;
+					child.material.side = THREE.FrontSide;
 					child.material.depthTest = false;
 					child.material.depthWrite = true;
 					//renderDepth

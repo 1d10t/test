@@ -22,8 +22,9 @@ AFRAME.registerComponent('transparent-texture', {
 			{
 				if ( child.isMesh )
 				{   
-					console.log('child mesh', child);
+					//console.log('child mesh', child);
 					child.material.transparent = true;
+					//child.material.needsUpdate = true;
 				}
 			})
 			

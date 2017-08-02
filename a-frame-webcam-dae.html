@@ -24,7 +24,7 @@ AFRAME.registerComponent('transparent-texture', {
 				{   
 					//console.log('child mesh', child);
 					child.material.transparent = true;
-					child.material.needsUpdate = true;
+					child.material.side = THREE.DoubleSide;
 				}
 			})
 			

@@ -4402,7 +4402,7 @@
 	</library_effects>
 	<library_images>
 		<image id="FenceTexture">
-			<init_from>fence.png</init_from>
+			<init_from>fence2p.png</init_from>
 		</image>
 	</library_images>
 	<scene>

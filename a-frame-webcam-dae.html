@@ -5,26 +5,26 @@
 <script>THREEx.ArToolkitContext.baseURL = 'https://jeromeetienne.github.io/AR.js/three.js/'</script -->
 <script>
 AFRAME.registerComponent('transparent-texture', {
-  schema: {
-    // Add properties.
-  },
-
-  init: function () {
-    this.applyToMesh();
-    this.el.addEventListener('model-loaded', () => this.applyToMesh());
-  },
-
-  applyToMesh: function() {
-    const mesh = this.el.getObject3D('mesh');
-    if (mesh) {
-		console.log(mesh);
-      mesh.material.transparent = true;
-    }
-  },
-
-  update: function () {
-    // Update `this.material`.
-  }
+	schema: {
+		// Add properties.
+	},
+	
+	init: function () {
+		this.applyToMesh();
+		this.el.addEventListener('model-loaded', () => this.applyToMesh());
+	},
+	
+	applyToMesh: function() {
+		const mesh = this.el.getObject3D('mesh');
+		if (mesh) {
+			console.log(mesh.material);
+			mesh.material.transparent = true;
+		}
+	},
+	
+	update: function () {
+		// Update `this.material`.
+	}
 });
 </script>
 </head>

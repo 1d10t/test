@@ -4,7 +4,7 @@ function geo_watch(success, error) {
     error = function(err) { console.warn(`ERROR(${err.code}): ${err.message}`); };
   
   if (!("geolocation" in navigator)){
-    geo_error({code: 0, message: 'Geolocation is not supported by your browser'});
+    error({code: 0, message: 'Geolocation is not supported by your browser'});
     return;
   }
   

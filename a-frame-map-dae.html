@@ -29,7 +29,6 @@ AFRAME.registerComponent('transparent-texture', {
 					child.material.depthWrite = true;
 				*/	
 					child.material.needsUpdate = true;
-					child.material.alphaTest = 0.5;
 				}
 			})
 			
@@ -45,7 +44,7 @@ AFRAME.registerComponent('transparent-texture', {
 </script>
 </head>
 <body style='margin : 0px; overflow: hidden;'>
-	<a-scene embedded artoolkit='sourceType: webcam;'>
+	<a-scene embedded artoolkit>
 		
 		<!--
 		<a-box position='0 0 0.5' material='opacity: 0.5;'></a-box>
@@ -55,6 +54,10 @@ AFRAME.registerComponent('transparent-texture', {
 		<a-assets>
 			<a-asset-item id="fence" src="fence11.dae"></a-asset-item>
 		</a-assets>
+		
+		<a-sky color="#6EBAA7"></a-sky>
+		
+		<a-entity camera></a-entity>
 		
 		<a-entity collada-model="#fence" transparent-texture></a-entity>
 		

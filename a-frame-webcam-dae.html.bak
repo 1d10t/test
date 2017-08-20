@@ -21,7 +21,7 @@ AFRAME.registerComponent('transparent-texture', {
 			mesh.traverse( function( child ) 
 			{
 				if ( child.isMesh )
-				{   
+				{
 					//console.log('child mesh', child);
 					child.material.transparent = true;
 				/*	child.material.side = THREE.BackSide;
@@ -29,6 +29,7 @@ AFRAME.registerComponent('transparent-texture', {
 					child.material.depthWrite = true;
 				*/	
 					child.material.needsUpdate = true;
+					child.material.alphaTest = 0.5;
 				}
 			})
 			
@@ -41,6 +42,26 @@ AFRAME.registerComponent('transparent-texture', {
 		// Update `this.material`.
 	}
 });
+
+camera.addEventListener('componentchanged', function (evt) {
+	if (evt.detail.name === 'position') {
+		console.log('Camera position went from', evt.detail.oldData, 'to', evt.detail.newData);
+		//var altitude = (this.el.getAttribute('position').z);
+	}
+	if (evt.detail.name === 'rotation') {
+		console.log('Camera rotation went from', evt.detail.oldData, 'to', evt.detail.newData);
+	}
+});
+
+window.onload = function(){
+	setInterval(function(){
+		var p = camera.el.getAttribute('position');
+		p.x += (Math.random()-0.5);
+		p.y += (Math.random()-0.5);
+		camera.el.setAttribute('position', p);
+	}, 3000);
+}
+
 </script>
 </head>
 <body style='margin : 0px; overflow: hidden;'>
@@ -56,6 +77,14 @@ AFRAME.registerComponent('transparent-texture', {
 		</a-assets>
 		
 		<a-entity collada-model="#fence" transparent-texture></a-entity>
+		
+		<!--
+		<a-entity position="0 0 5">
+			<a-camera></a-camera>
+		</a-entity>
+		-->
+		
+		<a-camera id="camera" position="5 5 0" user-height="1.6"></a-camera>
 		
 	</a-scene>
 </body>

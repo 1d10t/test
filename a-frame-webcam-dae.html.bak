@@ -46,6 +46,9 @@ AFRAME.registerComponent('transparent-texture', {
 var move_interval = null;
 
 window.onload = function(){
+	
+	if(move_interval) clearInterval(move_interval);
+	
 	var camera = document.getElementById('camera');
 	var camera_animation = document.getElementById('camera_animation');
 	
@@ -55,7 +58,7 @@ window.onload = function(){
 		console.log('camera position', p);
 		p.x += (Math.random()-0.5)*10;
 		p.z += (Math.random()-0.5)*10;
-		var new_p = `${p.x} 0 ${p.z}`;
+		var new_p = `${p.x} ${p.y} ${p.z}`;
 		console.log('new camera position', new_p);
 		//camera.setAttribute('position', p);
 		camera_animation.removeAttribute('to');
@@ -102,7 +105,7 @@ window.onload = function(){
 		
 		<a-entity camera="userHeight: 1.6" id="camera" position="5 0 5">
 			<a-animation id="camera_animation" attribute="position"
-				dur="100"
+				dur="1000"
 				easing="linear"
 				begin="move"
 				to="5 0 5"

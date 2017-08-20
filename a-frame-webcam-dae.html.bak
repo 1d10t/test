@@ -47,13 +47,15 @@ AFRAME.registerComponent('transparent-texture', {
 
 window.onload = function(){
 	var camera = document.getElementById('camera');
+	var camera_position = document.getElementById('camera_position');
 	
 	
 	setInterval(function(){
 		var p = camera.getAttribute('position');
 		p.x += (Math.random()-0.5)*10;
 		p.z += (Math.random()-0.5)*10;
-		camera.setAttribute('position', p);
+		//camera.setAttribute('position', p);
+		camera_position.setAttribute('to', p);
 	}, 3000);
 	
 	

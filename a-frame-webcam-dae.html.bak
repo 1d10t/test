@@ -52,6 +52,7 @@ window.onload = function(){
 	
 	setInterval(function(){
 		var p = camera.getAttribute('position');
+		console.log('camera position', p);
 		p.x += (Math.random()-0.5)*1;
 		p.z += (Math.random()-0.5)*1;
 		//camera.setAttribute('position', p);

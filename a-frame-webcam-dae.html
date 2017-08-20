@@ -43,24 +43,30 @@ AFRAME.registerComponent('transparent-texture', {
 	}
 });
 
-camera.addEventListener('componentchanged', function (evt) {
-	if (evt.detail.name === 'position') {
-		console.log('Camera position went from', evt.detail.oldData, 'to', evt.detail.newData);
-		//var altitude = (this.el.getAttribute('position').z);
-	}
-	if (evt.detail.name === 'rotation') {
-		console.log('Camera rotation went from', evt.detail.oldData, 'to', evt.detail.newData);
-	}
-});
+camera
 
 window.onload = function(){
 	var camera = document.getElementById('camera');
+	
+	
 	setInterval(function(){
 		var p = camera.getAttribute('position');
 		p.x += (Math.random()-0.5);
 		p.y += (Math.random()-0.5);
 		camera.setAttribute('position', JSON.parse(JSON.stringify(p)));
 	}, 3000);
+	
+	
+	camera.addEventListener('componentchanged', function (evt) {
+		if (evt.name === 'position') {
+			console.log('Camera position went from', evt.oldData, 'to', evt.newData);
+			//var altitude = (this.el.getAttribute('position').z);
+		}
+		if (evt.name === 'rotation') {
+			console.log('Camera rotation went from', evt.oldData, 'to', evt.newData);
+		}
+	});
+	
 }
 
 </script>

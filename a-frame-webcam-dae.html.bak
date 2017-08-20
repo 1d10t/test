@@ -56,10 +56,10 @@ camera.addEventListener('componentchanged', function (evt) {
 window.onload = function(){
 	var camera = document.getElementById('camera');
 	setInterval(function(){
-		var p = camera.el.getAttribute('position');
+		var p = camera.getAttribute('position');
 		p.x += (Math.random()-0.5);
 		p.y += (Math.random()-0.5);
-		camera.el.setAttribute('position', JSON.parse(JSON.stringify(p)));
+		camera.setAttribute('position', JSON.parse(JSON.stringify(p)));
 	}, 3000);
 }
 

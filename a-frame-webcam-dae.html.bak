@@ -58,7 +58,7 @@ window.onload = function(){
 		var p = camera.el.getAttribute('position');
 		p.x += (Math.random()-0.5);
 		p.y += (Math.random()-0.5);
-		camera.el.setAttribute('position', p);
+		camera.el.setAttribute('position', JSON.parse(JSON.stringify(p)));
 	}, 3000);
 }
 

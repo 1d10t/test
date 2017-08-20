@@ -55,7 +55,7 @@ window.onload = function(){
 		console.log('camera position', p);
 		p.x += (Math.random()-0.5)*1;
 		p.z += (Math.random()-0.5)*1;
-		var new_p = `${p.x} ${p.y} ${p.z}`;
+		var new_p = `${p.x} 0 ${p.z}`;
 		console.log('new camera position', new_p);
 		//camera.setAttribute('position', p);
 		camera_animation.setAttribute('to', new_p);
@@ -105,7 +105,8 @@ window.onload = function(){
 			<a-animation id="camera_animation" attribute="position"
 				dur="100"
 				easing="linear"
-				begin="move"></a-animation>
+				begin="move"
+				to="5 0 5"></a-animation>
 		</a-entity>
 		
 		<!--

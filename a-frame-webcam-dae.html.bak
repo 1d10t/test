@@ -5,9 +5,6 @@
 <script>THREEx.ArToolkitContext.baseURL = 'https://jeromeetienne.github.io/AR.js/three.js/'</script>
 <script>
 AFRAME.registerComponent('transparent-texture', {
-	schema: {
-		// Add properties.
-	},
 	
 	init: function () {
 		this.applyToMesh();
@@ -16,82 +13,41 @@ AFRAME.registerComponent('transparent-texture', {
 	
 	applyToMesh: function() {
 		const mesh = this.el.getObject3D('mesh');
-		if (mesh) {
-			
-			mesh.traverse( function( child ) 
-			{
+		if (mesh)
+			mesh.traverse( function( child ) {
 				if ( child.isMesh )
 				{
-					//console.log('child mesh', child);
 					child.material.transparent = true;
-				/*	child.material.side = THREE.BackSide;
-					child.material.depthTest = true;
-					child.material.depthWrite = true;
-				*/	
-					child.material.needsUpdate = true;
 					child.material.alphaTest = 0.5;
 				}
-			})
-			
-		//	console.log(mesh.material);
-		//	mesh.material.transparent = true;
-		}
-	},
-	
-	update: function () {
-		// Update `this.material`.
+			});
 	}
+	
 });
 
 var move_interval = null;
-var pos = null;
 
 window.onload = function(){
 	
 	if(move_interval) clearInterval(move_interval);
 	
 	var camera = document.getElementById('camera');
-	var camera_animation = document.getElementById('camera_animation');
-	
 	
 	move_interval = setInterval(function(){
-		var op = pos || camera.getAttribute('position');
-		var np = JSON.parse(JSON.stringify(op));
-		console.log('camera position', np);
-		np.y = 1.6;
-		np.x += (Math.random()-0.5)*10;
-		np.z += (Math.random()-0.5)*10;
-		console.log('new camera position', np);
-		//camera.setAttribute('position', np);
-		camera_animation.setAttribute('from', `${op.x} ${op.y} ${op.z}`);
-		camera_animation.setAttribute('to', `${np.x} ${np.y} ${np.z}`);
-		camera_animation.emit('move');
-		pos = np;
+		var p = camera.getAttribute('position');
+		console.log('camera position', p);
+		p.x += (Math.random()-0.5)*10;
+		p.z += (Math.random()-0.5)*10;
+		console.log('new camera position', p);
+		camera.setAttribute('position', p);
 	}, 3000);
 	
-	/*
-	camera.addEventListener('componentchanged', function (evt) {
-		console.log('camera changed', evt);
-		if (evt.detail.name === 'position') {
-			console.log('Camera position went from', evt.detail.oldData, 'to', evt.detail.newData);
-			//var altitude = (this.el.getAttribute('position').z);
-		}
-		if (evt.detail.name === 'rotation') {
-			console.log('Camera rotation went from', evt.detail.oldData, 'to', evt.detail.newData);
-		}
-	});
-	*/
 }
 
 </script>
 </head>
-<body style='margin : 0px; overflow: hidden;'>
+<body style='margin: 0px; overflow: hidden;'>
 	<a-scene embedded artoolkit='sourceType: webcam;'>
-		
-		<!--
-		<a-box position='0 0 0.5' material='opacity: 0.5;'></a-box>
-		<a-marker-camera preset='hiro'></a-marker-camera>
-		-->
 		
 		<a-assets>
 			<a-asset-item id="fence" src="fence11.dae"></a-asset-item>
@@ -99,26 +55,9 @@ window.onload = function(){
 		
 		<a-entity collada-model="#fence" transparent-texture></a-entity>
 		
-		<!--
-		<a-entity position="0 0 5">
-			<a-camera></a-camera>
-		</a-entity>
-		-->
 		
+		<a-camera id="camera" user-height="1.6"></a-camera>
 		
-		<a-entity camera="userHeight: 1.6" id="camera">
-			<a-animation id="camera_animation" attribute="position"
-				dur="1000"
-				easing="linear"
-				begin="move"
-				from="5 0 5"
-				to="5 0 5"
-				></a-animation>
-		</a-entity>
-		
-		<!--
-		<a-camera id="camera" position="5 0 5" user-height="1.6"></a-camera>
-		-->
 	</a-scene>
 </body>
 </html>

@@ -63,8 +63,8 @@ window.onload = function(){
 		np.z += (Math.random()-0.5)*10;
 		console.log('new camera position', np);
 		//camera.setAttribute('position', np);
-		camera_animation.setAttribute('from', op);
-		camera_animation.setAttribute('to', np);
+		camera_animation.setAttribute('from', `${op.x} ${op.y} ${op.z}`);
+		camera_animation.setAttribute('to', `${np.x} ${np.y} ${np.z}`);
 		camera_animation.emit('move');
 		pos = np;
 	}, 3000);

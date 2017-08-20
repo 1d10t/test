@@ -52,8 +52,9 @@ window.onload = function(){
 	
 	setInterval(function(){
 		var p = camera.getAttribute('position');
-		p.x += (Math.random()-0.5)*10;
-		p.z += (Math.random()-0.5)*10;
+		console.log('camera position', p);
+		p.x += (Math.random()-0.5)*1;
+		p.z += (Math.random()-0.5)*1;
 		//camera.setAttribute('position', p);
 		camera_animation.setAttribute('to', `${p.x} ${p.y} ${p.z}`);
 		camera_animation.emit('move');

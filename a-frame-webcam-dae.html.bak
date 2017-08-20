@@ -56,17 +56,17 @@ window.onload = function(){
 	
 	move_interval = setInterval(function(){
 		var op = pos || camera.getAttribute('position');
-		var p = JSON.parse(JSON.stringify(op));
-		console.log('camera position', p);
-		p.y = 1.6;
-		p.x += (Math.random()-0.5)*10;
-		p.z += (Math.random()-0.5)*10;
-		console.log('new camera position', p);
-		//camera.setAttribute('position', p);
+		var np = JSON.parse(JSON.stringify(op));
+		console.log('camera position', np);
+		np.y = 1.6;
+		np.x += (Math.random()-0.5)*10;
+		np.z += (Math.random()-0.5)*10;
+		console.log('new camera position', np);
+		//camera.setAttribute('position', np);
 		camera_animation.setAttribute('from', op);
-		camera_animation.setAttribute('to', p);
+		camera_animation.setAttribute('to', np);
 		camera_animation.emit('move');
-		pos = p;
+		pos = np;
 	}, 3000);
 	
 	/*

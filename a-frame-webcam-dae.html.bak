@@ -54,6 +54,7 @@ camera.addEventListener('componentchanged', function (evt) {
 });
 
 window.onload = function(){
+	var camera = document.getElementById('camera');
 	setInterval(function(){
 		var p = camera.el.getAttribute('position');
 		p.x += (Math.random()-0.5);

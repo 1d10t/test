@@ -43,14 +43,14 @@ AFRAME.registerComponent('transparent-texture', {
 	}
 });
 
-
+var move_interval = null;
 
 window.onload = function(){
 	var camera = document.getElementById('camera');
 	var camera_animation = document.getElementById('camera_animation');
 	
 	
-	setInterval(function(){
+	move_interval = setInterval(function(){
 		var p = camera.getAttribute('position');
 		console.log('camera position', p);
 		p.x += (Math.random()-0.5)*10;
@@ -58,6 +58,7 @@ window.onload = function(){
 		var new_p = `${p.x} 0 ${p.z}`;
 		console.log('new camera position', new_p);
 		//camera.setAttribute('position', p);
+		camera_animation.removeAttribute('to');
 		camera_animation.setAttribute('to', new_p);
 		camera_animation.emit('move');
 	}, 3000);
@@ -104,7 +105,8 @@ window.onload = function(){
 				dur="100"
 				easing="linear"
 				begin="move"
-				to="5 0 5"></a-animation>
+				to="5 0 5"
+				></a-animation>
 		</a-entity>
 		
 		<!--

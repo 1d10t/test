@@ -58,6 +58,7 @@ window.onload = function(){
 		var new_p = `${p.x} ${p.y} ${p.z}`;
 		console.log('new camera position', new_p);
 		//camera.setAttribute('position', p);
+		camera_animation.removeAttribute('to');
 		camera_animation.setAttribute('to', new_p);
 		camera_animation.emit('move');
 	}, 3000);

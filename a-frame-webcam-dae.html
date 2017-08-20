@@ -44,6 +44,7 @@ AFRAME.registerComponent('transparent-texture', {
 });
 
 var move_interval = null;
+var pos = null;
 
 window.onload = function(){
 	
@@ -54,16 +55,18 @@ window.onload = function(){
 	
 	
 	move_interval = setInterval(function(){
-		var p = camera.getAttribute('position');
-		console.log('camera position', p);
-		p.x += (Math.random()-0.5)*10;
-		p.z += (Math.random()-0.5)*10;
-		var new_p = `${p.x} ${p.y} ${p.z}`;
-		console.log('new camera position', new_p);
-		//camera.setAttribute('position', p);
-		camera_animation.removeAttribute('to');
-		camera_animation.setAttribute('to', new_p);
+		var op = pos || camera.getAttribute('position');
+		var np = JSON.parse(JSON.stringify(op));
+		console.log('camera position', np);
+		np.y = 1.6;
+		np.x += (Math.random()-0.5)*10;
+		np.z += (Math.random()-0.5)*10;
+		console.log('new camera position', np);
+		//camera.setAttribute('position', np);
+		camera_animation.setAttribute('from', op);
+		camera_animation.setAttribute('to', np);
 		camera_animation.emit('move');
+		pos = np;
 	}, 3000);
 	
 	/*
@@ -108,6 +111,7 @@ window.onload = function(){
 				dur="1000"
 				easing="linear"
 				begin="move"
+				from="5 0 5"
 				to="5 0 5"
 				></a-animation>
 		</a-entity>

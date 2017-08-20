@@ -53,15 +53,13 @@ window.onload = function(){
 	setInterval(function(){
 		var p = camera.getAttribute('position');
 		console.log('camera position', p);
-		p.x += (Math.random()-0.5)*1;
-		p.z += (Math.random()-0.5)*1;
+		p.x += (Math.random()-0.5)*10;
+		p.z += (Math.random()-0.5)*10;
 		var new_p = `${p.x} 0 ${p.z}`;
 		console.log('new camera position', new_p);
 		//camera.setAttribute('position', p);
 		camera_animation.setAttribute('to', new_p);
-		setTimeout(function(){
-			camera_animation.emit('move');
-		}, 1);
+		camera_animation.emit('move');
 	}, 3000);
 	
 	

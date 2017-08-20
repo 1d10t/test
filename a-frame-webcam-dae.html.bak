@@ -25,14 +25,71 @@ AFRAME.registerComponent('transparent-texture', {
 	
 });
 
-var move_interval = null;
+
+function geo_watch(success, error) {
+	
+	if(!error)
+		error = function(err) { console.warn(`ERROR(${err.code}): ${err.message}`); };
+	
+	if (!("geolocation" in navigator)){
+		error({code: 0, message: 'Geolocation is not supported by your browser'});
+		return;
+	}
+	
+	return navigator.geolocation.watchPosition(success, error, {enableHighAccuracy: true, maximumAge: 0, timeout: 27000});
+}
+
+function meters(src, dest){
+	var dlon = THREE.Math.degToRad(dest.longitude - src.longitude);
+	var dlat = THREE.Math.degToRad(dest.latitude - src.latitude);
+	var a = (Math.sin(dlat / 2) * Math.sin(dlat / 2)) + Math.cos(Math.radians(src.latitude)) * Math.cos(Math.radians(dest.latitude)) * (Math.sin(dlon / 2) * Math.sin(dlon / 2));
+	var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+	return angle * 6378160;
+}
+
+
+var zero_crd = null;
+var geo_watch_id = null;
 
 window.onload = function(){
 	
-	if(move_interval) clearInterval(move_interval);
-	
 	var camera = document.getElementById('camera');
+	var nogps = document.getElementById('nogps');
 	
+	
+	geo_watch_id = geo_watch(function(position){
+		var crd = position.coords;
+		
+		console.log('Your current position is:');
+		console.log(`Latitude : ${crd.latitude}`);
+		console.log(`Longitude: ${crd.longitude}`);
+		console.log(`More or less ${crd.accuracy} meters.`);
+		
+		if(crd.accuracy < 10){
+			
+			nogps.setAttribute('visible', false);
+			
+			if(!zero_crd) zero_crd = crd;
+			
+			// lat = z
+			// lon = x
+			
+			var p = camera.getAttribute('position');
+			console.log('camera position', p);
+			p.x = meters(zero_crd, {longitude: crd.longitude, latitude: zero_crd.latitude}) * (zero_crd.longitude > crd.longitude ? 1 : -1);
+			p.z = meters(zero_crd, {longitude: zero_crd.longitude, latitude: crd.latitude}) * (zero_crd.latitude > crd.latitude ? 1 : -1);
+			console.log('new camera position', p);
+			camera.setAttribute('position', p);
+			
+		}else{
+			
+			nogps.setAttribute('visible', true);
+			
+		}
+		
+	});
+	
+	/*
 	move_interval = setInterval(function(){
 		var p = camera.getAttribute('position');
 		console.log('camera position', p);
@@ -41,7 +98,7 @@ window.onload = function(){
 		console.log('new camera position', p);
 		camera.setAttribute('position', p);
 	}, 3000);
-	
+	*/
 }
 
 </script>
@@ -49,14 +106,15 @@ window.onload = function(){
 <body style='margin: 0px; overflow: hidden;'>
 	<a-scene embedded artoolkit='sourceType: webcam;'>
 		
-		<a-assets>
-			<a-asset-item id="fence" src="fence11.dae"></a-asset-item>
-		</a-assets>
-		
-		<a-entity collada-model="#fence" transparent-texture></a-entity>
-		
+		<a-entity id="nogps" bmfont-text="text: WHERE IS GPS?; color: #333" position="0 2 0"></a-entity>
 		
 		<a-camera id="camera" user-height="1.6"></a-camera>
+		
+		<a-assets>
+			<a-asset-item id="fence_asset" src="fence11.dae"></a-asset-item>
+		</a-assets>
+		
+		<a-entity id="fence" collada-model="#fence_asset" transparent-texture></a-entity>
 		
 	</a-scene>
 </body>

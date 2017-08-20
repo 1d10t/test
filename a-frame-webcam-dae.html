@@ -56,6 +56,7 @@ window.onload = function(){
 		p.z += (Math.random()-0.5)*10;
 		//camera.setAttribute('position', p);
 		camera_animation.setAttribute('to', p);
+		camera_animation.emit('move');
 	}, 3000);
 	
 	
@@ -99,7 +100,8 @@ window.onload = function(){
 			<a-animation id="camera_animation" attribute="position"
 				dur="100"
 				easing="linear"
-				to="5 0 5"></a-animation>
+				to="5 0 5"
+				begin="move"></a-animation>
 		</a-entity>
 		
 		<!--

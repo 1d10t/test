@@ -47,13 +47,16 @@ AFRAME.registerComponent('transparent-texture', {
 
 window.onload = function(){
 	var camera = document.getElementById('camera');
+	var camera_animation = document.getElementById('camera_animation');
 	
 	
 	setInterval(function(){
 		var p = camera.getAttribute('position');
 		p.x += (Math.random()-0.5)*10;
 		p.z += (Math.random()-0.5)*10;
-		camera.setAttribute('position', p);
+		//camera.setAttribute('position', p);
+		camera_animation.setAttribute('to', p);
+		camera_animation.emit('move');
 	}, 3000);
 	
 	
@@ -61,7 +64,7 @@ window.onload = function(){
 		console.log('camera changed', evt);
 		if (evt.detail.name === 'position') {
 			console.log('Camera position went from', evt.detail.oldData, 'to', evt.detail.newData);
-			//var altitude = (this.el.getAttribute('position').y);
+			//var altitude = (this.el.getAttribute('position').z);
 		}
 		if (evt.detail.name === 'rotation') {
 			console.log('Camera rotation went from', evt.detail.oldData, 'to', evt.detail.newData);
@@ -92,8 +95,18 @@ window.onload = function(){
 		</a-entity>
 		-->
 		
-		<a-camera id="camera" position="5 0 5" user-height="1.6"></a-camera>
 		
+		<a-entity camera id="camera" position="5 0 5">
+			<a-animation id="camera_animation" attribute="position"
+				dur="100"
+				easing="linear"
+				to="5 0 5"
+				begin="move"></a-animation>
+		</a-entity>
+		
+		<!--
+		<a-camera id="camera" position="5 0 5" user-height="1.6"></a-camera>
+		-->
 	</a-scene>
 </body>
 </html>

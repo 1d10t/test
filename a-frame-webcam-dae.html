@@ -44,29 +44,21 @@ AFRAME.registerComponent('transparent-texture', {
 });
 
 var move_interval = null;
-var pos = null;
 
 window.onload = function(){
 	
 	if(move_interval) clearInterval(move_interval);
 	
 	var camera = document.getElementById('camera');
-	var camera_animation = document.getElementById('camera_animation');
 	
 	
 	move_interval = setInterval(function(){
-		var op = pos || camera.getAttribute('position');
-		var np = JSON.parse(JSON.stringify(op));
-		console.log('camera position', np);
-		np.y = 1.6;
-		np.x += (Math.random()-0.5)*10;
-		np.z += (Math.random()-0.5)*10;
-		console.log('new camera position', np);
-		//camera.setAttribute('position', np);
-		camera_animation.setAttribute('from', `${op.x} ${op.y} ${op.z}`);
-		camera_animation.setAttribute('to', `${np.x} ${np.y} ${np.z}`);
-		camera_animation.emit('move');
-		pos = np;
+		var p = camera.getAttribute('position');
+		console.log('camera position', p);
+		p.x += (Math.random()-0.5)*10;
+		p.z += (Math.random()-0.5)*10;
+		console.log('new camera position', p);
+		camera.setAttribute('position', p);
 	}, 3000);
 	
 	/*
@@ -106,19 +98,8 @@ window.onload = function(){
 		-->
 		
 		
-		<a-entity camera="userHeight: 1.6" id="camera">
-			<a-animation id="camera_animation" attribute="position"
-				dur="1000"
-				easing="linear"
-				begin="move"
-				from="5 0 5"
-				to="5 0 5"
-				></a-animation>
-		</a-entity>
-		
-		<!--
 		<a-camera id="camera" position="5 0 5" user-height="1.6"></a-camera>
-		-->
+		
 	</a-scene>
 </body>
 </html>

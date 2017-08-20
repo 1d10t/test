@@ -106,7 +106,7 @@ window.onload = function(){
 		-->
 		
 		
-		<a-entity camera="userHeight: 1.6" id="camera" position="5 0 5">
+		<a-entity camera="userHeight: 1.6" id="camera">
 			<a-animation id="camera_animation" attribute="position"
 				dur="1000"
 				easing="linear"

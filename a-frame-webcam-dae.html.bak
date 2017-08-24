@@ -54,23 +54,18 @@ var geo_watch_id = null;
 window.onload = function(){
 	
 	var camera = document.getElementById('camera');
-	var nogps = document.getElementById('nogps');
 	
 	
 	geo_watch_id = geo_watch(function(position){
+		
 		var crd = position.coords;
 		
-		console.log('Your current position is:');
-		console.log(`Latitude : ${crd.latitude}`);
-		console.log(`Longitude: ${crd.longitude}`);
-		console.log(`More or less ${crd.accuracy} meters.`);
-		
-		if(crd.accuracy < 10){
+		if(crd.accuracy < 15){
 			
-			nogps.setAttribute('visible', false);
-			
-			if(!zero_crd) zero_crd = crd;
-			
+			if(!zero_crd){
+				zero_crd = crd;
+				console.log('zero coords', zero_crd);
+			}
 			// lat = z
 			// lon = x
 			
@@ -83,7 +78,7 @@ window.onload = function(){
 			
 		}else{
 			
-			nogps.setAttribute('visible', true);
+			
 			
 		}
 		
@@ -105,8 +100,6 @@ window.onload = function(){
 </head>
 <body style='margin: 0px; overflow: hidden;'>
 	<a-scene embedded artoolkit='sourceType: webcam;'>
-		
-		<a-entity id="nogps" bmfont-text="text: WHERE IS GPS?; color: #333" position="0 2 0"></a-entity>
 		
 		<a-camera id="camera" user-height="1.6"></a-camera>
 		

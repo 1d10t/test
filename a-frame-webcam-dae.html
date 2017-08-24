@@ -65,7 +65,7 @@ window.onload = function(){
 		console.log(`Longitude: ${crd.longitude}`);
 		console.log(`More or less ${crd.accuracy} meters.`);
 		
-		if(crd.accuracy < 10){
+		if(crd.accuracy < 100){
 			
 			nogps.setAttribute('visible', false);
 			

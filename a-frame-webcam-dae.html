@@ -59,12 +59,20 @@ window.onload = function(){
 		
 		var crd = position.coords;
 		
+		crd_longitude.innerText = crd.longitude;
+		crd_latitude.innerText = crd.latitude;
+		
 		if(crd.accuracy < 15){
 			
 			if(!zero_crd){
 				zero_crd = crd;
 				console.log('zero coords', zero_crd);
+				
+				zero_crd_longitude.innerText = zero_crd.longitude;
+				zero_crd_latitude.innerText = zero_crd.latitude;
 			}
+			
+			
 			// lat = z
 			// lon = x
 			
@@ -74,6 +82,9 @@ window.onload = function(){
 			
 			p.x = meters(zero_crd, {longitude: crd.longitude, latitude: zero_crd.latitude}) * (crd.longitude > zero_crd.longitude ? 1 : -1);
 			p.z = meters(zero_crd, {longitude: zero_crd.longitude, latitude: crd.latitude}) * (crd.latitude > zero_crd.latitude ? 1 : -1);
+			
+			camera_p_x.innerText = p.x;
+			camera_p_z.innerText = p.z;
 			
 			console.log('new camera position', p);
 			
@@ -102,6 +113,17 @@ window.onload = function(){
 </script>
 </head>
 <body style='margin: 0px; overflow: hidden;'>
+	
+	<div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
+		<div>
+			coords: <span id="crd_longitude"></span>, <span id="crd_latitude"></span>
+				(zero coords: <span id="zero_crd_longitude"></span>, <span id="zero_crd_latitude"></span>)
+		</div>
+		<div>
+			camera coords: <span id="camera_p_x"></span>, <span id="camera_p_z"></span>
+		</div>
+	</div>
+	
 	<a-scene embedded artoolkit='sourceType: webcam;'>
 		
 		<a-camera id="camera" user-height="1.6"></a-camera>

@@ -53,6 +53,8 @@ var geo_watch_id = null;
 
 function set_camera_by_crd(camera, crd){
 	
+	console.log('new gps position', crd);
+	
 	crd_longitude.innerText = crd.longitude;
 	crd_latitude.innerText = crd.latitude;
 	

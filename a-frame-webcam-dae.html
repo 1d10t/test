@@ -39,9 +39,11 @@ function geo_watch(success, error) {
 	return navigator.geolocation.watchPosition(success, error, {enableHighAccuracy: true, maximumAge: 0, timeout: 27000});
 }
 
+Math.radians = THREE.Math.degToRad;
+
 function meters(src, dest){
-	var dlon = THREE.Math.degToRad(dest.longitude - src.longitude);
-	var dlat = THREE.Math.degToRad(dest.latitude - src.latitude);
+	var dlon = Math.radians(dest.longitude - src.longitude);
+	var dlat = Math.radians(dest.latitude - src.latitude);
 	var a = (Math.sin(dlat / 2) * Math.sin(dlat / 2)) + Math.cos(Math.radians(src.latitude)) * Math.cos(Math.radians(dest.latitude)) * (Math.sin(dlon / 2) * Math.sin(dlon / 2));
 	var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	return angle * 6378160;

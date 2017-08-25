@@ -102,7 +102,7 @@ window.onload = function(){
 	
 	var camera = document.getElementById('camera');
 	
-	/* gps camera positioning 
+	/* gps camera positioning */
 	console.log('gps camera positioning');
 	geo_watch_id = geo_watch(function(position){
 		
@@ -110,10 +110,10 @@ window.onload = function(){
 		
 		set_camera_by_crd(camera, crd);
 		
-	});*/
+	});
 	/* /gps camera positioning */
 	
-	/* fake camera positioning */
+	/* fake camera positioning 
 	console.log('fake camera positioning');
 	zero_crd = {longitude: 55.1409698, latitude: 37.4602963, accuracy: 10};
 	var crd = JSON.parse(JSON.stringify(zero_crd));
@@ -125,7 +125,7 @@ window.onload = function(){
 		
 		set_camera_by_crd(camera, crd);
 		
-	}, 3000);
+	}, 3000);*/
 	/* /fake camera positioning */
 	
 }

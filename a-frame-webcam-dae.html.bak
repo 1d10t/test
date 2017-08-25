@@ -53,14 +53,14 @@ function meters(src, dest){
 var zero_crd = null;
 var geo_watch_id = null;
 
-function set_camera_by_crd(camera, crd){
+function set_camera_by_crd(camera, crd, accuracy){
 	
 	console.log('new gps position', crd);
 	
 	crd_longitude.innerText = crd.longitude;
 	crd_latitude.innerText = crd.latitude;
 	
-	if(crd.accuracy < 100){
+	if(crd.accuracy < accuracy){
 		
 		if(!zero_crd){
 			zero_crd = crd;
@@ -108,7 +108,7 @@ window.onload = function(){
 		
 		var crd = position.coords;
 		
-		set_camera_by_crd(camera, crd);
+		set_camera_by_crd(camera, crd, 100);
 		
 	});
 	/* /gps camera positioning */
@@ -123,7 +123,7 @@ window.onload = function(){
 		crd.longitude += (Math.random()-0.5)/10000;
 		crd.latitude += (Math.random()-0.5)/10000;
 		
-		set_camera_by_crd(camera, crd);
+		set_camera_by_crd(camera, crd, 100);
 		
 	}, 3000);*/
 	/* /fake camera positioning */

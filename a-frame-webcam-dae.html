@@ -78,8 +78,8 @@ function set_camera_by_crd(camera, crd, accuracy){
 		
 		console.log('camera position', p);
 		
-		p.x = meters(zero_crd, {longitude: crd.longitude, latitude: zero_crd.latitude}) * (crd.longitude > zero_crd.longitude ? 1 : -1);
-		p.z = meters(zero_crd, {longitude: zero_crd.longitude, latitude: crd.latitude}) * (crd.latitude > zero_crd.latitude ? 1 : -1);
+		p.x = meters(zero_crd, {longitude: crd.longitude, latitude: zero_crd.latitude}) * (crd.longitude > zero_crd.longitude ? -1 : 1);
+		p.z = meters(zero_crd, {longitude: zero_crd.longitude, latitude: crd.latitude}) * (crd.latitude > zero_crd.latitude ? -1 : 1);
 		
 		camera_p_x.innerText = p.x;
 		camera_p_z.innerText = p.z;

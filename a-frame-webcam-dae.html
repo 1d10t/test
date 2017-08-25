@@ -62,7 +62,7 @@ window.onload = function(){
 		crd_longitude.innerText = crd.longitude;
 		crd_latitude.innerText = crd.latitude;
 		
-		if(crd.accuracy < 15){
+		if(crd.accuracy < 100){
 			
 			if(!zero_crd){
 				zero_crd = crd;

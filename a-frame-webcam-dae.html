@@ -51,63 +51,77 @@ function meters(src, dest){
 var zero_crd = null;
 var geo_watch_id = null;
 
+function set_camera_by_crd(camera, crd){
+	
+	crd_longitude.innerText = crd.longitude;
+	crd_latitude.innerText = crd.latitude;
+	
+	if(crd.accuracy < 100){
+		
+		if(!zero_crd){
+			zero_crd = crd;
+			console.log('zero coords', zero_crd);
+			
+			zero_crd_longitude.innerText = zero_crd.longitude;
+			zero_crd_latitude.innerText = zero_crd.latitude;
+		}
+		
+		
+		// lat = z
+		// lon = x
+		
+		var p = camera.getAttribute('position');
+		
+		console.log('camera position', p);
+		
+		p.x = meters(zero_crd, {longitude: crd.longitude, latitude: zero_crd.latitude}) * (crd.longitude > zero_crd.longitude ? 1 : -1);
+		p.z = meters(zero_crd, {longitude: zero_crd.longitude, latitude: crd.latitude}) * (crd.latitude > zero_crd.latitude ? 1 : -1);
+		
+		camera_p_x.innerText = p.x;
+		camera_p_z.innerText = p.z;
+		
+		console.log('new camera position', p);
+		
+		camera.setAttribute('position', p);
+		
+	}else{
+		
+		
+		
+	}
+	
+	
+	
+}
+
 window.onload = function(){
 	
 	var camera = document.getElementById('camera');
 	
+	/* gps camera positioning 
 	geo_watch_id = geo_watch(function(position){
 		
 		var crd = position.coords;
 		
-		crd_longitude.innerText = crd.longitude;
-		crd_latitude.innerText = crd.latitude;
+		set_camera_by_crd(camera, crd);
 		
-		if(crd.accuracy < 100){
-			
-			if(!zero_crd){
-				zero_crd = crd;
-				console.log('zero coords', zero_crd);
-				
-				zero_crd_longitude.innerText = zero_crd.longitude;
-				zero_crd_latitude.innerText = zero_crd.latitude;
-			}
-			
-			
-			// lat = z
-			// lon = x
-			
-			var p = camera.getAttribute('position');
-			
-			console.log('camera position', p);
-			
-			p.x = meters(zero_crd, {longitude: crd.longitude, latitude: zero_crd.latitude}) * (crd.longitude > zero_crd.longitude ? 1 : -1);
-			p.z = meters(zero_crd, {longitude: zero_crd.longitude, latitude: crd.latitude}) * (crd.latitude > zero_crd.latitude ? 1 : -1);
-			
-			camera_p_x.innerText = p.x;
-			camera_p_z.innerText = p.z;
-			
-			console.log('new camera position', p);
-			
-			camera.setAttribute('position', p);
-			
-		}else{
-			
-			
-			
-		}
-		
-	});
+	});*/
+	/* /gps camera positioning */
 	
-	/*
+	/* fake camera positioning */
+	zero_crd = {longitude: 55.1409698, latitude: 37.4602963};
+	var crd = JSON.parse(JSON.stringify(zero_crd));
+	
 	move_interval = setInterval(function(){
-		var p = camera.getAttribute('position');
-		console.log('camera position', p);
-		p.x += (Math.random()-0.5)*10;
-		p.z += (Math.random()-0.5)*10;
-		console.log('new camera position', p);
-		camera.setAttribute('position', p);
+		
+		crd.longitude += (Math.random()-0.5)/1000;
+		crd.latitude += (Math.random()-0.5)/1000;
+		
+		set_camera_by_crd(camera, crd);
+		
 	}, 3000);
-	*/
+	/* /fake camera positioning */
+	
 }
 
 </script>

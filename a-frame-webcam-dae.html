@@ -2,7 +2,6 @@
 <head>
 <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
 <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.min.js"></script>
-<script src="orientationChange.js"></script>
 <script>THREEx.ArToolkitContext.baseURL = 'https://jeromeetienne.github.io/AR.js/three.js/'</script>
 <script>
 AFRAME.registerComponent('transparent-texture', {
@@ -49,6 +48,8 @@ function meters(src, dest){
 	var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	return angle * 6378160;
 }
+
+
 
 
 var zero_crd = null;
@@ -100,6 +101,41 @@ function set_camera_by_crd(camera, crd, accuracy){
 
 
 
+function compassHeading(alpha, beta, gamma) {
+	
+	// Convert degrees to radians
+	var alphaRad = alpha * (Math.PI / 180);
+	var betaRad = beta * (Math.PI / 180);
+	var gammaRad = gamma * (Math.PI / 180);
+	
+	// Calculate equation components
+	var cA = Math.cos(alphaRad);
+	var sA = Math.sin(alphaRad);
+	var cB = Math.cos(betaRad);
+	var sB = Math.sin(betaRad);
+	var cG = Math.cos(gammaRad);
+	var sG = Math.sin(gammaRad);
+	
+	// Calculate A, B, C rotation components
+	var rA = - cA * sG - sA * sB * cG;
+	var rB = - sA * sG + cA * sB * cG;
+	var rC = - cB * cG;
+	
+	// Calculate compass heading
+	var compassHeading = Math.atan(rA / rB);
+	
+	// Convert from half unit circle to whole unit circle
+	if(rB < 0) {
+		compassHeading += Math.PI;
+	}else if(rA < 0) {
+		compassHeading += 2 * Math.PI;
+	}
+	
+	// Convert radians to degrees
+	compassHeading *= 180 / Math.PI;
+	
+	return compassHeading;
+}
 
 set_camera_by_angle.last_timestamp = 0;
 
@@ -162,12 +198,30 @@ window.onload = function(){
 	/* /fake camera positioning */
 	
 	/* magnet sensor camera positioning */
-	window.addEventListener('orientationchange', function(e) {
-		set_camera_by_angle(camera, window.orientation, 1000);
-	}, true);
+	window.addEventListener('deviceorientation', function(evt) {
+		
+		var heading = null;
+		
+		if(typeof(evt.webkitCompassHeading) != 'undefined'
+		&& evt.webkitCompassHeading > 0
+		&& evt.webkitCompassAccuracy < 50){
+			heading = evt.webkitCompassHeading;
+		}else if(evt.absolute === true && evt.alpha !== null) {
+			heading = compassHeading(evt.alpha, evt.beta, evt.gamma);
+		}
+		
+		if(heading)
+			set_camera_by_angle(camera, heading, 1000);
+		
+	}, false);
 	/* /magnet sensor camera positioning */
 	
 }
+
+
+
+
+
 
 
 

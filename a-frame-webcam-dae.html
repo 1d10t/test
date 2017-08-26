@@ -198,7 +198,8 @@ window.onload = function(){
 	/* /fake camera positioning */
 	
 	/* magnet sensor camera positioning */
-	window.addEventListener('deviceorientation', function(evt) {
+	
+	function orientation_handler(evt) {
 		
 		var heading = null;
 		
@@ -223,9 +224,12 @@ window.onload = function(){
 		if(heading !== null)
 			set_camera_by_angle(camera, heading, 1000);
 		
-	}, false);
+	}
 	
-	window.addEventListener("compassneedscalibration", function(event) {
+	window.addEventListener('deviceorientation', orientation_handler, false);
+	window.addEventListener('deviceorientationabsolute', orientation_handler, false);
+	
+	window.addEventListener('compassneedscalibration', function(event) {
 		alert('Your compass needs calibrating! Wave your device in a figure-eight motion');
 		event.preventDefault();
 	}, true);

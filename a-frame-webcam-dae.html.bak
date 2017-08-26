@@ -203,14 +203,16 @@ window.onload = function(){
 		var heading = null;
 		
 		if(typeof(evt.webkitCompassHeading) != 'undefined'
-		&& evt.webkitCompassHeading > 0
 		&& evt.webkitCompassAccuracy < 50){
 			heading = evt.webkitCompassHeading;
-		}else if(evt.absolute === true && evt.alpha !== null) {
+		}else if(evt.absolute === true
+		&& evt.alpha !== null
+		&& evt.beta !== null
+		&& evt.gamma !== null) {
 			heading = compassHeading(evt.alpha, evt.beta, evt.gamma);
 		}
 		
-		if(heading)
+		if(heading && heading > 0)
 			set_camera_by_angle(camera, heading, 1000);
 		
 	}, false);

@@ -226,18 +226,13 @@ window.onload = function(){
 		
 	}
 	
-	
-	var orientation_absolute_ok = false;
-	function orientation_absolute_check(){
-		window.removeEventListener('deviceorientationabsolute', orientation_absolute_check, false);
+	if('ondeviceorientationabsolute' in window){
 		window.addEventListener('deviceorientationabsolute', orientation_handler, false);
-	}
-	window.addEventListener('deviceorientationabsolute', orientation_absolute_check, false);
-	setTimeout(function(){
-		window.removeEventListener('deviceorientationabsolute', orientation_absolute_check, false);
+	}else if('ondeviceorientation' in window){
 		window.addEventListener('deviceorientation', orientation_handler, false);
-	}, 5000);
-	
+	}else{
+		compass_heading.innerText = 'not supported';
+	}
 	
 	window.addEventListener('compassneedscalibration', function(event) {
 		alert('Your compass needs calibrating! Wave your device in a figure-eight motion');

@@ -220,7 +220,7 @@ window.onload = function(){
 			compass_heading.innerText = 'evt.alpha === null';
 		}
 		
-		if(heading && heading > 0)
+		if(heading !== null)
 			set_camera_by_angle(camera, heading, 1000);
 		
 	}, false);

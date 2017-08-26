@@ -224,6 +224,11 @@ window.onload = function(){
 			set_camera_by_angle(camera, heading, 1000);
 		
 	}, false);
+	
+	window.addEventListener("compassneedscalibration", function(event) {
+		alert('Your compass needs calibrating! Wave your device in a figure-eight motion');
+		event.preventDefault();
+	}, true);
 	/* /magnet sensor camera positioning */
 	
 }

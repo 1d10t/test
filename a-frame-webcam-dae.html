@@ -2,6 +2,7 @@
 <head>
 <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
 <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.min.js"></script>
+<script src="https://gist.github.com/1d10t/0f8c9e5d92238e41de1f77c82f038042.js"></script>
 <script>THREEx.ArToolkitContext.baseURL = 'https://jeromeetienne.github.io/AR.js/three.js/'</script>
 <script>
 AFRAME.registerComponent('transparent-texture', {
@@ -94,7 +95,39 @@ function set_camera_by_crd(camera, crd, accuracy){
 		
 	}
 	
+}
+
+
+
+
+
+set_camera_by_angle.last_timestamp = 0;
+
+function set_camera_by_angle(camera, angle, time_limit){
 	
+	if(typeof(time_limit) == 'undefined') time_limit = 1000;
+	
+	var timestamp = Date.now();
+	
+	if((set_camera_by_angle.last_timestamp + time_limit) > timestamp){
+		return;
+	}
+	
+	set_camera_by_angle.last_timestamp = timestamp;
+	
+	console.log('new camera angle', angle);
+	
+	orientation_angle.innerText = angle;
+	
+	var r = camera.getAttribute('rotation');
+	
+	console.log('camera rotation', r);
+	
+	r.y = angle;
+	
+	console.log('new camera rotation', r);
+	
+	camera.setAttribute('rotation', r);
 	
 }
 
@@ -128,7 +161,15 @@ window.onload = function(){
 	}, 3000);*/
 	/* /fake camera positioning */
 	
+	/* magnet sensor camera positioning */
+	window.addEventListener('orientationchange', function(e) {
+		set_camera_by_angle(camera, window.orientation, 1000);
+	}, true);
+	/* /magnet sensor camera positioning */
+	
 }
+
+
 
 </script>
 </head>
@@ -141,6 +182,9 @@ window.onload = function(){
 		</div>
 		<div>
 			camera coords: <span id="camera_p_x"></span>, <span id="camera_p_z"></span>
+		</div>
+		<div>
+			orientation_angle: <span id="orientation_angle"></span>
 		</div>
 	</div>
 	

@@ -78,8 +78,8 @@ function set_camera_by_crd(camera, crd, accuracy){
 		
 		console.log('camera position', p);
 		
-		p.x = meters(zero_crd, {longitude: crd.longitude, latitude: zero_crd.latitude}) * (crd.longitude > zero_crd.longitude ? 1 : -1);
-		p.z = meters(zero_crd, {longitude: zero_crd.longitude, latitude: crd.latitude}) * (crd.latitude > zero_crd.latitude ? 1 : -1);
+		p.x = meters(zero_crd, {longitude: crd.longitude, latitude: zero_crd.latitude}) * (crd.longitude > zero_crd.longitude ? -1 : 1);
+		p.z = meters(zero_crd, {longitude: zero_crd.longitude, latitude: crd.latitude}) * (crd.latitude > zero_crd.latitude ? -1 : 1);
 		
 		camera_p_x.innerText = p.x;
 		camera_p_z.innerText = p.z;
@@ -94,7 +94,39 @@ function set_camera_by_crd(camera, crd, accuracy){
 		
 	}
 	
+}
+
+
+
+
+
+set_camera_by_angle.last_timestamp = 0;
+
+function set_camera_by_angle(camera, angle, time_limit){
 	
+	if(typeof(time_limit) == 'undefined') time_limit = 1000;
+	
+	var timestamp = Date.now();
+	
+	if((set_camera_by_angle.last_timestamp + time_limit) > timestamp){
+		return;
+	}
+	
+	set_camera_by_angle.last_timestamp = timestamp;
+	
+	console.log('new camera angle', angle);
+	
+	orientation_angle.innerText = angle;
+	
+	var r = camera.getAttribute('rotation');
+	
+	console.log('camera rotation', r);
+	
+	r.y = angle;
+	
+	console.log('new camera rotation', r);
+	
+	camera.setAttribute('rotation', r);
 	
 }
 
@@ -128,7 +160,15 @@ window.onload = function(){
 	}, 3000);*/
 	/* /fake camera positioning */
 	
+	/* magnet sensor camera positioning */
+	window.addEventListener('orientationchange', function(e) {
+		set_camera_by_angle(camera, window.orientation, 1000);
+	}, true);
+	/* /magnet sensor camera positioning */
+	
 }
+
+
 
 </script>
 </head>
@@ -141,6 +181,9 @@ window.onload = function(){
 		</div>
 		<div>
 			camera coords: <span id="camera_p_x"></span>, <span id="camera_p_z"></span>
+		</div>
+		<div>
+			orientation_angle: <span id="orientation_angle"></span>
 		</div>
 	</div>
 	

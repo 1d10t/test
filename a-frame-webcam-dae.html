@@ -215,10 +215,10 @@ window.onload = function(){
 			if(evt.absolute === true) {
 				heading = compassHeading(evt.alpha, evt.beta, evt.gamma);
 			}else{
-				compass_heading.innerText = 'evt.absolute === false';
+			//	compass_heading.innerText = 'evt.absolute === false';
 			}
 		}else{
-			compass_heading.innerText = 'evt.alpha === null';
+		//	compass_heading.innerText = 'evt.alpha === null';
 		}
 		
 		if(heading !== null)

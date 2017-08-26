@@ -215,7 +215,7 @@ window.onload = function(){
 			if(evt.absolute === true) {
 				heading = compassHeading(evt.alpha, evt.beta, evt.gamma);
 			}else{
-				compass_heading.innerText = 'evt.absolute === false';
+			//	compass_heading.innerText = 'evt.absolute === false';
 			}
 		}else{
 			compass_heading.innerText = 'evt.alpha === null';
@@ -229,7 +229,7 @@ window.onload = function(){
 	window.addEventListener('deviceorientation', orientation_handler, false);
 	window.addEventListener('deviceorientationabsolute', orientation_handler, false);
 	
-	window.addEventListener("compassneedscalibration", function(event) {
+	window.addEventListener('compassneedscalibration', function(event) {
 		alert('Your compass needs calibrating! Wave your device in a figure-eight motion');
 		event.preventDefault();
 	}, true);

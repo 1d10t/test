@@ -153,7 +153,7 @@ function set_camera_by_angle(camera, angle, time_limit){
 	
 	console.log('new camera angle', angle);
 	
-	orientation_angle.innerText = angle;
+	compass_heading.innerText = angle;
 	
 	var r = camera.getAttribute('rotation');
 	
@@ -202,14 +202,22 @@ window.onload = function(){
 		
 		var heading = null;
 		
-		if(typeof(evt.webkitCompassHeading) != 'undefined'
-		&& evt.webkitCompassAccuracy < 50){
-			heading = evt.webkitCompassHeading;
-		}else if(evt.absolute === true
-		&& evt.alpha !== null
-		&& evt.beta !== null
-		&& evt.gamma !== null) {
-			heading = compassHeading(evt.alpha, evt.beta, evt.gamma);
+		if(typeof(evt.webkitCompassHeading) != 'undefined'){
+			
+			if(evt.webkitCompassAccuracy < 50){
+				heading = evt.webkitCompassHeading;
+			}else{
+				compass_heading.innerText = 'webkitCompassAccuracy is evt.webkitCompassAccuracy';
+			}
+			
+		}else if(evt.alpha !== null){
+			if(evt.absolute === true) {
+				heading = compassHeading(evt.alpha, evt.beta, evt.gamma);
+			}else{
+				compass_heading.innerText = 'evt.absolute === false';
+			}
+		}else{
+			compass_heading.innerText = 'evt.alpha === null';
 		}
 		
 		if(heading && heading > 0)
@@ -240,7 +248,7 @@ window.onload = function(){
 			camera coords: <span id="camera_p_x"></span>, <span id="camera_p_z"></span>
 		</div>
 		<div>
-			orientation_angle: <span id="orientation_angle"></span>
+			compass heading: <span id="compass_heading"></span>
 		</div>
 	</div>
 	

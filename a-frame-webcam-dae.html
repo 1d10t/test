@@ -202,17 +202,25 @@ window.onload = function(){
 		
 		var heading = null;
 		
-		if(typeof(evt.webkitCompassHeading) != 'undefined'
-		&& evt.webkitCompassAccuracy < 50){
-			heading = evt.webkitCompassHeading;
-		}else if(evt.absolute === true
-		&& evt.alpha !== null
-		&& evt.beta !== null
-		&& evt.gamma !== null) {
-			heading = compassHeading(evt.alpha, evt.beta, evt.gamma);
+		if(typeof(evt.webkitCompassHeading) != 'undefined'){
+			
+			if(evt.webkitCompassAccuracy < 50){
+				heading = evt.webkitCompassHeading;
+			}else{
+				compass_heading.innerText = 'webkitCompassAccuracy is evt.webkitCompassAccuracy';
+			}
+			
+		}else if(evt.alpha !== null){
+			if(evt.absolute === true) {
+				heading = compassHeading(evt.alpha, evt.beta, evt.gamma);
+			}else{
+				compass_heading.innerText = 'evt.absolute === false';
+			}
+		}else{
+			compass_heading.innerText = 'evt.alpha === null';
 		}
 		
-		if(heading && heading > 0)
+		if(heading !== null)
 			set_camera_by_angle(camera, heading, 1000);
 		
 	}, false);

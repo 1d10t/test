@@ -241,6 +241,12 @@ window.onload = function(){
 	
 	/* /magnet sensor camera positioning */
 	
+	camera.addEventListener('componentchanged', function (evt) {
+		if (evt.detail.name !== 'rotation') { return; }
+		console.log('camera changed', evt.detail.newData);
+		camera_angle.innerText = evt.detail.newData.y;
+	});
+	
 }
 
 
@@ -263,7 +269,8 @@ window.onload = function(){
 			camera coords: <span id="camera_p_x"></span>, <span id="camera_p_z"></span>
 		</div>
 		<div>
-			compass heading: <span id="compass_heading"></span>
+			compass heading: <span id="compass_heading"></span>,
+			camera angle: <span id="camera_angle"></span>
 		</div>
 	</div>
 	

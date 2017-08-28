@@ -151,6 +151,7 @@ function set_camera_by_angle(camera, angle, time_limit){
 	
 	set_camera_by_angle.last_timestamp = timestamp;
 	
+	/*
 	console.log('new camera angle', angle);
 	
 	compass_heading.innerText = angle;
@@ -164,6 +165,14 @@ function set_camera_by_angle(camera, angle, time_limit){
 	console.log('new camera rotation', r);
 	
 	camera.setAttribute('rotation', r);
+	*/
+	
+	var r = camera.getAttribute('rotation');
+	camera.sceneEl.behaviors.tick
+		.find(function(x){ return x.attrName == 'look-controls' })
+		//.yawObject.rotation.y -= THREE.Math.degToRad(r.y - angle);
+		.yawObject.rotation.y = THREE.Math.degToRad(angle);
+	
 	
 }
 
@@ -276,7 +285,7 @@ window.onload = function(){
 	
 	<a-scene embedded artoolkit='sourceType: webcam;'>
 		
-		<a-camera id="camera" user-height="1.6"></a-camera>
+		<a-camera id="camera" user-height="1.6" look-controls-enabled="false"></a-camera>
 		
 		<a-assets>
 			<a-asset-item id="fence_asset" src="fence11.dae"></a-asset-item>

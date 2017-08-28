@@ -28,7 +28,7 @@ AFRAME.registerComponent('transparent-texture', {
 
 function geo_watch(success, error) {
 	
-	if(!error)
+	if(typeof(error) == 'undefined')
 		error = function(err) { console.warn('ERROR('+err.code+'): '+err.message); };
 	
 	if (!("geolocation" in navigator)){

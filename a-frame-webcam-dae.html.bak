@@ -166,12 +166,16 @@ function set_camera_by_angle(camera, angle, time_limit){
 	
 	camera.setAttribute('rotation', r);
 	*/
-	
+	var look_controls;
+	for(var i=0; i<camera.sceneEl.behaviors.tick.length; i++){
+		var x = camera.sceneEl.behaviors.tick[0];
+		if(x.attrName == 'look-controls') look_controls = x, break;
+	}
+	if(!look_controls) return;
 	var r = camera.getAttribute('rotation');
-	camera.sceneEl.behaviors.tick
-		.find(function(x){ return x.attrName == 'look-controls' })
-		.yawObject.rotation.y += THREE.Math.degToRad(r.y - angle);
-	
+	look_controls
+		//.yawObject.rotation.y -= THREE.Math.degToRad(r.y - angle);
+		.yawObject.rotation.y = THREE.Math.degToRad(angle);
 	
 }
 

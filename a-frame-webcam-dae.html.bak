@@ -151,10 +151,11 @@ function set_camera_by_angle(camera, angle, time_limit){
 	
 	set_camera_by_angle.last_timestamp = timestamp;
 	
-	/*
 	console.log('new camera angle', angle);
 	
 	compass_heading.innerText = angle;
+	
+	/*
 	
 	var r = camera.getAttribute('rotation');
 	
@@ -172,7 +173,6 @@ function set_camera_by_angle(camera, angle, time_limit){
 		if(x.attrName == 'look-controls'){ look_controls = x; break; }
 	}
 	if(!look_controls) return;
-	var r = camera.getAttribute('rotation');
 	look_controls
 		//.yawObject.rotation.y -= THREE.Math.degToRad(r.y - angle);
 		.yawObject.rotation.y = THREE.Math.degToRad(angle);

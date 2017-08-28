@@ -169,7 +169,7 @@ function set_camera_by_angle(camera, angle, time_limit){
 	var look_controls;
 	for(var i=0; i<camera.sceneEl.behaviors.tick.length; i++){
 		var x = camera.sceneEl.behaviors.tick[i];
-		if(x.attrName == 'look-controls') look_controls = x, break;
+		if(x.attrName == 'look-controls'){ look_controls = x; break; }
 	}
 	if(!look_controls) return;
 	var r = camera.getAttribute('rotation');

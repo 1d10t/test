@@ -8,7 +8,7 @@ AFRAME.registerComponent('transparent-texture', {
 	
 	init: function () {
 		this.applyToMesh();
-		this.el.addEventListener('model-loaded', function(){ this.applyToMesh() });
+		this.el.addEventListener('model-loaded', function(){ return this.applyToMesh() });
 	},
 	
 	applyToMesh: function() {

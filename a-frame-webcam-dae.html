@@ -169,7 +169,7 @@ function set_camera_by_angle(camera, angle, time_limit){
 	camera.setAttribute('rotation', r);
 	*/
 	
-	/*
+	
 	var look_controls;
 	for(var i=0; i<camera.sceneEl.behaviors.tick.length; i++){
 		var x = camera.sceneEl.behaviors.tick[i];
@@ -179,7 +179,7 @@ function set_camera_by_angle(camera, angle, time_limit){
 	look_controls
 		//.yawObject.rotation.y -= THREE.Math.degToRad(r.y - angle);
 		.yawObject.rotation.y = THREE.Math.degToRad(angle);
-	*/
+	/**/
 }
 
 window.onload = function(){
@@ -291,7 +291,7 @@ window.onload = function(){
 	
 	<a-scene embedded artoolkit='sourceType: webcam;'>
 		
-		<a-camera id="camera" user-height="1.6" look-controls-enabled="false"></a-camera>
+		<a-camera id="camera" user-height="1.6" look-controls-enabled="true"></a-camera>
 		
 		<a-assets>
 			<a-asset-item id="fence_asset" src="fence11.dae"></a-asset-item>

@@ -255,7 +255,7 @@ window.onload = function(){
 			case 'rotation':
 				//console.log('camera rotation changed', evt.detail.newData);
 				camera_angle.innerText = evt.detail.newData.y;
-				yaw_angle.innerText = THREE.Math.RAD2DEG(camera.components['look-controls'].yawObject.rotation.y);
+				yaw_angle.innerText = THREE.Math.radToDeg(camera.components['look-controls'].yawObject.rotation.y);
 				break;
 			case 'position':
 				//console.log('camera position changed', evt.detail.newData);

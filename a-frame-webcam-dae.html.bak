@@ -241,7 +241,7 @@ AFRAME.registerComponent('compass-rotation', {
 		
 	}
 	
-}
+});
 
 
 
@@ -264,7 +264,7 @@ window.onload = function(){
 		}
 	});
 	
-}
+};
 
 
 </script>
@@ -281,7 +281,8 @@ window.onload = function(){
 		</div>
 		<div>
 			compass heading: <span id="compass_heading"></span>,
-			camera angle: <span id="camera_angle"></span>
+			camera angle: <span id="camera_angle"></span>,
+			yaw angle: <span id="yaw_angle"></span>
 		</div>
 	</div>
 	

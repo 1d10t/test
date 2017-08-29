@@ -255,6 +255,7 @@ window.onload = function(){
 			case 'rotation':
 				//console.log('camera rotation changed', evt.detail.newData);
 				camera_angle.innerText = evt.detail.newData.y;
+				yaw_angle.innerText = camera.components['look-controls'].yawObject.rotation.y;
 				break;
 			case 'position':
 				//console.log('camera position changed', evt.detail.newData);
@@ -281,7 +282,8 @@ window.onload = function(){
 		</div>
 		<div>
 			compass heading: <span id="compass_heading"></span>,
-			camera angle: <span id="camera_angle"></span>
+			camera angle: <span id="camera_angle"></span>,
+			yaw angle: <span id="yaw_angle"></span>
 		</div>
 	</div>
 	

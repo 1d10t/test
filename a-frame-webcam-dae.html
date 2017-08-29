@@ -27,6 +27,104 @@ AFRAME.registerComponent('transparent-texture', {
 });
 
 
+AFRAME.registerComponent('gps-position', {
+	
+	watchId: null,
+	zeroCrd: null,
+	crd: null,
+	
+	schema: {
+		accuracy: {
+			type: 'int',
+			default: 100
+		},
+		'zero-crd-latitude': {
+			type: 'number',
+			default: NaN
+		},
+		'zero-crd-longitude': {
+			type: 'number',
+			default: NaN
+		}
+	},
+	
+	init: function () {
+		
+		if(!isNaN(this.data['zero-crd-latitude']) && !isNaN(this.data['zero-crd-longitude'])){
+			this.zeroCrd = {latitude: this.data['zero-crd-latitude'], longitude: this.data['zero-crd-longitude']};
+		}
+		
+		this.watchId = this.watchGPS(function(position){
+			this.crd = position.coords;
+			this.updatePosition();
+		}.bind(this));
+		
+	},
+	
+	watchGPS: function (success, error) {
+		
+		if(typeof(error) == 'undefined')
+			error = function(err) { console.warn('ERROR('+err.code+'): '+err.message); };
+		
+		if (!("geolocation" in navigator)){
+			error({code: 0, message: 'Geolocation is not supported by your browser'});
+			return;
+		}
+		
+		return navigator.geolocation.watchPosition(success, error, {enableHighAccuracy: true, maximumAge: 0, timeout: 27000});
+	},
+	
+	updatePosition: function () {
+		
+		if(this.crd.accuracy > this.data.accuracy) return;
+		
+		if(!this.zeroCrd) this.zeroCrd = this.crd;
+		
+		var p = this.el.getAttribute('position');
+		
+		p.x = this.calcMeters(
+			this.zeroCrd,
+			{
+				longitude: this.crd.longitude,
+				latitude: this.zeroCrd.latitude
+			}
+		) * (
+			this.crd.longitude > this.zeroCrd.longitude
+				? -1 : 1
+		);
+		p.z = this.calcMeters(
+			this.zeroCrd,
+			{
+				longitude: this.zeroCrd.longitude,
+				latitude: this.crd.latitude
+			}
+		) * (
+			this.crd.latitude > this.zeroCrd.latitude
+				? -1 : 1
+		);
+		
+		this.el.setAttribute('position', p);
+		
+	},
+	
+	calcMeters: function(src, dest) {
+		var dlon = THREE.Math.degToRad(dest.longitude - src.longitude);
+		var dlat = THREE.Math.degToRad(dest.latitude - src.latitude);
+		
+		var a = (Math.sin(dlat / 2) * Math.sin(dlat / 2)) + Math.cos(THREE.Math.degToRad(src.latitude)) * Math.cos(THREE.Math.degToRad(dest.latitude)) * (Math.sin(dlon / 2) * Math.sin(dlon / 2));
+		var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		
+		return angle * 6378160;
+	}
+	
+	remove: function() {
+		if(this.watchId) navigator.geolocation.clearWatch(this.watchId);
+		this.watchId = null;
+	}
+	
+});
+
+
 function geo_watch(success, error) {
 	
 	if(typeof(error) == 'undefined')
@@ -140,6 +238,8 @@ function compassHeading(alpha, beta, gamma) {
 
 set_camera_by_angle.last_timestamp = 0;
 
+set_camera_by_angle.look_controls = null;
+
 function set_camera_by_angle(camera, angle, time_limit){
 	
 	if(typeof(time_limit) == 'undefined') time_limit = 1000;
@@ -156,9 +256,9 @@ function set_camera_by_angle(camera, angle, time_limit){
 	
 	compass_heading.innerText = angle;
 	
-	/*
-	
 	var r = camera.getAttribute('rotation');
+	
+	/*
 	
 	console.log('camera rotation', r);
 	
@@ -169,24 +269,33 @@ function set_camera_by_angle(camera, angle, time_limit){
 	camera.setAttribute('rotation', r);
 	*/
 	
-	/*
-	var look_controls;
-	for(var i=0; i<camera.sceneEl.behaviors.tick.length; i++){
-		var x = camera.sceneEl.behaviors.tick[i];
-		if(x.attrName == 'look-controls'){ look_controls = x; break; }
+	
+	var look_controls = set_camera_by_angle.look_controls;
+	
+	if(!look_controls){
+		for(var i=0; i<camera.sceneEl.behaviors.tick.length; i++){
+			var x = camera.sceneEl.behaviors.tick[i];
+			if(x.attrName == 'look-controls'){
+				look_controls = set_camera_by_angle.look_controls = x;
+				break;
+			}
+		}
+		
 	}
+	
 	if(!look_controls) return;
+	
 	look_controls
-		//.yawObject.rotation.y -= THREE.Math.degToRad(r.y - angle);
-		.yawObject.rotation.y = THREE.Math.degToRad(angle);
-	*/
+		.yawObject.rotation.y = THREE.Math.degToRad(angle - r.y);
+		//.yawObject.rotation.y = THREE.Math.degToRad(angle);
+	/**/
 }
 
 window.onload = function(){
 	
 	var camera = document.getElementById('camera');
 	
-	/* gps camera positioning */
+	/* gps camera positioning 
 	console.log('gps camera positioning');
 	geo_watch_id = geo_watch(function(position){
 		
@@ -194,7 +303,7 @@ window.onload = function(){
 		
 		set_camera_by_crd(camera, crd, 100);
 		
-	});
+	});*/
 	/* /gps camera positioning */
 	
 	/* fake camera positioning 
@@ -257,18 +366,20 @@ window.onload = function(){
 	/* /magnet sensor camera positioning */
 	
 	camera.addEventListener('componentchanged', function (evt) {
-		if (evt.detail.name !== 'rotation') { return; }
-		console.log('camera changed', evt.detail.newData);
-		camera_angle.innerText = evt.detail.newData.y;
+		switch(evt.detail.name){
+			case 'rotation':
+				console.log('camera rotation changed', evt.detail.newData);
+				camera_angle.innerText = evt.detail.newData.y;
+				break;
+			case 'position':
+				console.log('camera position changed', evt.detail.newData);
+				camera_p_x.innerText = evt.detail.newData.x;
+				camera_p_y.innerText = evt.detail.newData.y;
+				break;
+		}
 	});
 	
 }
-
-
-
-
-
-
 
 
 </script>
@@ -291,7 +402,7 @@ window.onload = function(){
 	
 	<a-scene embedded artoolkit='sourceType: webcam;'>
 		
-		<a-camera id="camera" user-height="1.6" look-controls-enabled="true"></a-camera>
+		<a-camera id="camera" user-height="1.6" gps-position></a-camera>
 		
 		<a-assets>
 			<a-asset-item id="fence_asset" src="fence11.dae"></a-asset-item>

@@ -134,7 +134,7 @@ AFRAME.registerComponent('compass-rotation', {
 	schema: {
 		fixTime: {
 			type: 'int',
-			default: 3000
+			default: 41
 		}
 	},
 	
@@ -234,6 +234,20 @@ AFRAME.registerComponent('compass-rotation', {
 	},
 	
 	updateRotation: function() {
+		
+		/*
+		camera.components["look-controls"].yawObject.rotation.y = THREE.Math.degToRad(
+			(
+				360
+				- camera.components["compass-rotation"].heading
+				- (
+					camera.getAttribute('rotation').y
+					- THREE.Math.radToDeg(camera.components["look-controls"].yawObject.rotation.y)
+				)
+			)
+			% 360
+		)
+		*/
 		
 		var heading = 360 - this.heading
 		var camera_rotation = this.el.getAttribute('rotation').y;

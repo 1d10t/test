@@ -134,7 +134,7 @@ AFRAME.registerComponent('compass-rotation', {
 	schema: {
 		fixTime: {
 			type: 'int',
-			default: 1000
+			default: 3000
 		}
 	},
 	
@@ -164,7 +164,7 @@ AFRAME.registerComponent('compass-rotation', {
 	tick: function (time, timeDelta) {
 		
 		if(this.heading === null
-		/*|| this.lastTimestamp > (time - this.data.fixTime)*/) return;
+		|| this.lastTimestamp > (time - this.data.fixTime)) return;
 		
 		this.lastTimestamp = time;
 		this.updateRotation();
@@ -236,9 +236,9 @@ AFRAME.registerComponent('compass-rotation', {
 	updateRotation: function() {
 		
 		var heading = 2 * Math.PI - this.heading;
-		var offset = heading - this.el.getAttribute('rotation').y;
+		var offset = heading - this.el.getAttribute('rotation').y - this.lookControls.yawObject.rotation.y;
 		
-		//this.lookControls.yawObject.rotation.y = THREE.Math.degToRad(offset);
+		this.lookControls.yawObject.rotation.y = THREE.Math.degToRad(offset);
 		
 	}
 	

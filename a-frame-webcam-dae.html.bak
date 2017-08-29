@@ -235,7 +235,7 @@ AFRAME.registerComponent('compass-rotation', {
 	
 	updateRotation: function() {
 		
-		var heading = this.heading + 360;
+		var heading = this.heading;
 		
 		var camera_rotation = this.el.getAttribute('rotation').y;
 		var yaw_rotation = THREE.Math.radToDeg(this.lookControls.yawObject.rotation.y);

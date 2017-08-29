@@ -236,7 +236,7 @@ AFRAME.registerComponent('compass-rotation', {
 	updateRotation: function() {
 		
 		var heading = 2 * Math.PI - this.heading;
-		var offset = this.heading - this.el.getAttribute('rotation').y;
+		var offset = heading - this.el.getAttribute('rotation').y;
 		
 		this.lookControls.yawObject.rotation.y = THREE.Math.degToRad(offset);
 		

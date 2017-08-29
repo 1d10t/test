@@ -286,8 +286,8 @@ function set_camera_by_angle(camera, angle, time_limit){
 	if(!look_controls) return;
 	
 	look_controls
-		.yawObject.rotation.y = THREE.Math.degToRad(r.y - angle);
-		//.yawObject.rotation.y = THREE.Math.degToRad(angle);
+		//.yawObject.rotation.y = THREE.Math.degToRad(r.y - angle);
+		.yawObject.rotation.y = THREE.Math.degToRad(angle);
 	/**/
 }
 

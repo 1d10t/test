@@ -125,205 +125,89 @@ AFRAME.registerComponent('gps-position', {
 });
 
 
-function geo_watch(success, error) {
+AFRAME.registerComponent('compass-rotation', {
 	
-	if(typeof(error) == 'undefined')
-		error = function(err) { console.warn('ERROR('+err.code+'): '+err.message); };
+	lookControls: null,
+	lastTimestamp: 0,
+	heading: null,
 	
-	if (!("geolocation" in navigator)){
-		error({code: 0, message: 'Geolocation is not supported by your browser'});
-		return;
-	}
+	schema: {
+		fixTime: {
+			type: 'int',
+			default: 1000
+		}
+	},
 	
-	return navigator.geolocation.watchPosition(success, error, {enableHighAccuracy: true, maximumAge: 0, timeout: 27000});
-}
-
-Math.radians = THREE.Math.degToRad;
-
-function meters(src, dest){
-	var dlon = Math.radians(dest.longitude - src.longitude);
-	var dlat = Math.radians(dest.latitude - src.latitude);
-	var a = (Math.sin(dlat / 2) * Math.sin(dlat / 2)) + Math.cos(Math.radians(src.latitude)) * Math.cos(Math.radians(dest.latitude)) * (Math.sin(dlon / 2) * Math.sin(dlon / 2));
-	var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-	return angle * 6378160;
-}
-
-
-
-
-var zero_crd = null;
-var geo_watch_id = null;
-
-function set_camera_by_crd(camera, crd, accuracy){
-	
-	console.log('new gps position', crd);
-	
-	crd_longitude.innerText = crd.longitude;
-	crd_latitude.innerText = crd.latitude;
-	
-	if(crd.accuracy < accuracy){
+	init: function () {
 		
-		if(!zero_crd){
-			zero_crd = crd;
-			console.log('zero coords', zero_crd);
-			
-			zero_crd_longitude.innerText = zero_crd.longitude;
-			zero_crd_latitude.innerText = zero_crd.latitude;
+		if(typeof(this.el.components['look-controls']) == 'undefined') return;
+		
+		this.lookControls = this.el.components['look-controls'];
+		
+		this.handlerOrientation = this.handlerOrientation.bind(this);
+		
+		if('ondeviceorientationabsolute' in window){
+			window.addEventListener('deviceorientationabsolute', this.handlerOrientation), false);
+		}else if('ondeviceorientation' in window){
+			window.addEventListener('deviceorientation', this.handlerOrientation, false);
+		}else{
+			alert('Compass not supported');
 		}
 		
+		window.addEventListener('compassneedscalibration', function(event) {
+			alert('Your compass needs calibrating! Wave your device in a figure-eight motion');
+			event.preventDefault();
+		}, true);
 		
-		// lat = z
-		// lon = x
+	},
+	
+	tick: function (time, timeDelta) {
 		
-		var p = camera.getAttribute('position');
+		if(this.heading === null
+		|| this.lastTimestamp > (time - this.data.fixTime)) return;
 		
-		console.log('camera position', p);
+		this.lastTimestamp = time;
+		this.updateRotation();
 		
-		p.x = meters(zero_crd, {longitude: crd.longitude, latitude: zero_crd.latitude}) * (crd.longitude > zero_crd.longitude ? -1 : 1);
-		p.z = meters(zero_crd, {longitude: zero_crd.longitude, latitude: crd.latitude}) * (crd.latitude > zero_crd.latitude ? -1 : 1);
+	},
+	
+	calcCompassHeading: function (alpha, beta, gamma) {
 		
-		camera_p_x.innerText = p.x;
-		camera_p_z.innerText = p.z;
+		// Convert degrees to radians
+		var alphaRad = alpha * (Math.PI / 180);
+		var betaRad = beta * (Math.PI / 180);
+		var gammaRad = gamma * (Math.PI / 180);
 		
-		console.log('new camera position', p);
+		// Calculate equation components
+		var cA = Math.cos(alphaRad);
+		var sA = Math.sin(alphaRad);
+		var cB = Math.cos(betaRad);
+		var sB = Math.sin(betaRad);
+		var cG = Math.cos(gammaRad);
+		var sG = Math.sin(gammaRad);
 		
-		camera.setAttribute('position', p);
+		// Calculate A, B, C rotation components
+		var rA = - cA * sG - sA * sB * cG;
+		var rB = - sA * sG + cA * sB * cG;
+		var rC = - cB * cG;
 		
-	}else{
+		// Calculate compass heading
+		var compassHeading = Math.atan(rA / rB);
 		
-		
-		
-	}
-	
-}
-
-
-
-
-function compassHeading(alpha, beta, gamma) {
-	
-	// Convert degrees to radians
-	var alphaRad = alpha * (Math.PI / 180);
-	var betaRad = beta * (Math.PI / 180);
-	var gammaRad = gamma * (Math.PI / 180);
-	
-	// Calculate equation components
-	var cA = Math.cos(alphaRad);
-	var sA = Math.sin(alphaRad);
-	var cB = Math.cos(betaRad);
-	var sB = Math.sin(betaRad);
-	var cG = Math.cos(gammaRad);
-	var sG = Math.sin(gammaRad);
-	
-	// Calculate A, B, C rotation components
-	var rA = - cA * sG - sA * sB * cG;
-	var rB = - sA * sG + cA * sB * cG;
-	var rC = - cB * cG;
-	
-	// Calculate compass heading
-	var compassHeading = Math.atan(rA / rB);
-	
-	// Convert from half unit circle to whole unit circle
-	if(rB < 0) {
-		compassHeading += Math.PI;
-	}else if(rA < 0) {
-		compassHeading += 2 * Math.PI;
-	}
-	
-	// Convert radians to degrees
-	compassHeading *= 180 / Math.PI;
-	
-	return compassHeading;
-}
-
-set_camera_by_angle.last_timestamp = 0;
-
-set_camera_by_angle.look_controls = null;
-
-function set_camera_by_angle(camera, angle, time_limit){
-	
-	if(typeof(time_limit) == 'undefined') time_limit = 1000;
-	
-	var timestamp = Date.now();
-	
-	if((set_camera_by_angle.last_timestamp + time_limit) > timestamp){
-		return;
-	}
-	
-	set_camera_by_angle.last_timestamp = timestamp;
-	
-	console.log('new camera angle', angle);
-	
-	compass_heading.innerText = angle;
-	
-	var r = camera.getAttribute('rotation');
-	
-	/*
-	
-	console.log('camera rotation', r);
-	
-	r.y = angle;
-	
-	console.log('new camera rotation', r);
-	
-	camera.setAttribute('rotation', r);
-	*/
-	
-	
-	var look_controls = set_camera_by_angle.look_controls;
-	
-	if(!look_controls){
-		for(var i=0; i<camera.sceneEl.behaviors.tick.length; i++){
-			var x = camera.sceneEl.behaviors.tick[i];
-			if(x.attrName == 'look-controls'){
-				look_controls = set_camera_by_angle.look_controls = x;
-				break;
-			}
+		// Convert from half unit circle to whole unit circle
+		if(rB < 0) {
+			compassHeading += Math.PI;
+		}else if(rA < 0) {
+			compassHeading += 2 * Math.PI;
 		}
 		
-	}
-	
-	if(!look_controls) return;
-	
-	look_controls
-		//.yawObject.rotation.y = THREE.Math.degToRad(r.y - angle);
-		.yawObject.rotation.y = THREE.Math.degToRad(angle);
-	/**/
-}
-
-window.onload = function(){
-	
-	var camera = document.getElementById('camera');
-	
-	/* gps camera positioning 
-	console.log('gps camera positioning');
-	geo_watch_id = geo_watch(function(position){
+		// Convert radians to degrees
+		compassHeading *= 180 / Math.PI;
 		
-		var crd = position.coords;
-		
-		set_camera_by_crd(camera, crd, 100);
-		
-	});*/
-	/* /gps camera positioning */
+		return compassHeading;
+	},
 	
-	/* fake camera positioning 
-	console.log('fake camera positioning');
-	zero_crd = {longitude: 55.1409698, latitude: 37.4602963, accuracy: 10};
-	var crd = JSON.parse(JSON.stringify(zero_crd));
-	
-	move_interval = setInterval(function(){
-		
-		crd.longitude += (Math.random()-0.5)/10000;
-		crd.latitude += (Math.random()-0.5)/10000;
-		
-		set_camera_by_crd(camera, crd, 100);
-		
-	}, 3000);*/
-	/* /fake camera positioning */
-	
-	/* magnet sensor camera positioning */
-	
-	function orientation_handler(evt) {
+	handlerOrientation: function (evt) {
 		
 		var heading = null;
 		
@@ -332,38 +216,39 @@ window.onload = function(){
 			if(evt.webkitCompassAccuracy < 50){
 				heading = evt.webkitCompassHeading;
 			}else{
-				compass_heading.innerText = 'webkitCompassAccuracy is evt.webkitCompassAccuracy';
+				console.warn('webkitCompassAccuracy is evt.webkitCompassAccuracy');
 			}
 			
 		}else if(evt.alpha !== null){
 			if(evt.absolute === true || typeof(evt.absolute == 'undefined')) {
-				heading = compassHeading(evt.alpha, evt.beta, evt.gamma);
+				heading = this.calcCompassHeading(evt.alpha, evt.beta, evt.gamma);
 			}else{
-				compass_heading.innerText = 'evt.absolute === false';
+				console.warn('evt.absolute === false');
 			}
 		}else{
-			compass_heading.innerText = 'evt.alpha === null';
+			console.warn('evt.alpha === null');
 		}
 		
-		if(heading !== null)
-			set_camera_by_angle(camera, heading, 1000);
+		this.heading = heading;
+		
+	},
+	
+	updateRotation: function() {
+		
+		// var r = camera.getAttribute('rotation');
+		// r.y
+		this.lookControls.yawObject.rotation.y = THREE.Math.degToRad(this.heading);
 		
 	}
 	
-	if('ondeviceorientationabsolute' in window){
-		window.addEventListener('deviceorientationabsolute', orientation_handler, false);
-	}else if('ondeviceorientation' in window){
-		window.addEventListener('deviceorientation', orientation_handler, false);
-	}else{
-		compass_heading.innerText = 'not supported';
-	}
+}
+
+
+
+window.onload = function(){
 	
-	window.addEventListener('compassneedscalibration', function(event) {
-		alert('Your compass needs calibrating! Wave your device in a figure-eight motion');
-		event.preventDefault();
-	}, true);
+	var camera = document.getElementById('camera');
 	
-	/* /magnet sensor camera positioning */
 	
 	camera.addEventListener('componentchanged', function (evt) {
 		switch(evt.detail.name){
@@ -374,7 +259,7 @@ window.onload = function(){
 			case 'position':
 				console.log('camera position changed', evt.detail.newData);
 				camera_p_x.innerText = evt.detail.newData.x;
-				camera_p_y.innerText = evt.detail.newData.y;
+				camera_p_z.innerText = evt.detail.newData.z;
 				break;
 		}
 	});
@@ -402,7 +287,7 @@ window.onload = function(){
 	
 	<a-scene embedded artoolkit='sourceType: webcam;'>
 		
-		<a-camera id="camera" user-height="1.6" gps-position></a-camera>
+		<a-camera id="camera" user-height="1.6" gps-position compass-rotation></a-camera>
 		
 		<a-assets>
 			<a-asset-item id="fence_asset" src="fence11.dae"></a-asset-item>

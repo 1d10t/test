@@ -240,7 +240,7 @@ AFRAME.registerComponent('compass-rotation', {
 		var camera_rotation = this.el.getAttribute('rotation').y;
 		var yaw_rotation = THREE.Math.radToDeg(this.lookControls.yawObject.rotation.y);
 		// yaw_rotation постепенно поглащается camera_rotation
-		var offset = (heading - (camera_rotation - yaw_rotation)) % 360;
+		var offset = (heading - (camera_rotation + yaw_rotation)) % 360;
 		
 	//	console.log('yaw_rotation = ('+this.heading+' + 360) - (camera_rotation + '+yaw_rotation+')');
 		

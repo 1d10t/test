@@ -115,7 +115,7 @@ AFRAME.registerComponent('gps-position', {
 		var angle = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		
 		return angle * 6378160;
-	}
+	},
 	
 	remove: function() {
 		if(this.watchId) navigator.geolocation.clearWatch(this.watchId);

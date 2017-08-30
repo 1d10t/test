@@ -249,6 +249,9 @@ AFRAME.registerComponent('compass-rotation', {
 		)
 		*/
 		
+		this.lookControls.yawObject.rotation.y = 0;
+		return;
+		
 		var heading = 360 - this.heading
 		var camera_rotation = this.el.getAttribute('rotation').y;
 		var yaw_rotation = THREE.Math.radToDeg(this.lookControls.yawObject.rotation.y);
@@ -306,7 +309,7 @@ window.onload = function(){
 		</div>
 	</div>
 	
-	<a-scene embedded artoolkit='sourceType: none;'><!-- 'sourceType: webcam;' -->
+	<a-scene embedded artoolkit='sourceType: webcam;'><!--  -->
 		
 		<a-camera id="camera" user-height="1.6" gps-position compass-rotation><!--  --></a-camera>
 		

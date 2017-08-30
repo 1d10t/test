@@ -250,6 +250,7 @@ AFRAME.registerComponent('compass-rotation', {
 		*/
 		
 		this.lookControls.yawObject.rotation.y = 0;
+		return;
 		
 		var heading = 360 - this.heading
 		var camera_rotation = this.el.getAttribute('rotation').y;

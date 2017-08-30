@@ -289,9 +289,13 @@ window.onload = function(){
 		switch(evt.detail.name){
 			case 'rotation':
 				//console.log('camera rotation changed', evt.detail.newData);
+				var
+					compassRotation = camera.components['gps-position'],
+					lookControls = camera.components['look-controls']
+				;
 				camera_angle.innerText = evt.detail.newData.y;
-				yaw_angle.innerText = THREE.Math.radToDeg(camera.components['look-controls'].yawObject.rotation.y);
-				compass_heading.innerText = 360 - camera.components['compass-rotation'].heading;
+				yaw_angle.innerText = THREE.Math.radToDeg(lookControls.yawObject.rotation.y);
+				compass_heading.innerText = 360 - compassRotation.heading;
 				break;
 			case 'position':
 				//console.log('camera position changed', evt.detail.newData);

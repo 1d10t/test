@@ -306,7 +306,7 @@ window.onload = function(){
 		</div>
 	</div>
 	
-	<a-scene ><!-- embedded artoolkit='sourceType: webcam;' -->
+	<a-scene embedded artoolkit='sourceType: none;'><!--  -->
 		
 		<a-camera id="camera" user-height="1.6" gps-position compass-rotation><!--  --></a-camera>
 		

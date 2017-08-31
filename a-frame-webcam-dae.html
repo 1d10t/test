@@ -100,7 +100,7 @@ AFRAME.registerComponent('gps-position', {
 			}
 		) * (
 			this.crd.latitude > this.zeroCrd.latitude
-				? -1 : 1
+				? 1 : -1
 		);
 		
 		this.el.setAttribute('position', p);

@@ -315,7 +315,7 @@ window.onload = function(){
 					if(gpsPosition.crd){
 						crd_longitude.innerText = gpsPosition.crd.longitude;
 						crd_latitude.innerText = gpsPosition.crd.latitude;
-						geohash_7chars.innerText = Geohash.encode(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 0.0001);
+						geohash_7chars.innerText = Geohash.encode(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 7);
 					}
 					if(gpsPosition.zeroCrd){
 						zero_crd_longitude.innerText = gpsPosition.zeroCrd.longitude;

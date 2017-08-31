@@ -158,7 +158,7 @@ AFRAME.registerComponent('compass-rotation', {
 				this.data.orientationEvent = 'ondeviceorientation';
 			}else{
 				this.data.orientationEvent = '';
-				console.warn('Compass not supported');
+				alert('Compass not supported');
 				return;
 			}
 		}

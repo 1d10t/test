@@ -292,7 +292,7 @@ window.onload = function(){
 			case 'rotation':
 				//console.log('camera rotation changed', evt.detail.newData);
 				var
-					compassRotation = camera.components['gps-position'],
+					compassRotation = camera.components['compass-rotation'],
 					lookControls = camera.components['look-controls']
 				;
 				camera_angle.innerText = evt.detail.newData.y;

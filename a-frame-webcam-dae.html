@@ -295,7 +295,7 @@ window.onload = function(){
 				;
 				camera_angle.innerText = evt.detail.newData.y;
 				yaw_angle.innerText = THREE.Math.radToDeg(lookControls.yawObject.rotation.y);
-				compass_heading.innerText = 360 - compassRotation.heading;
+				compass_heading.innerText = compassRotation.heading;
 				break;
 			case 'position':
 				//console.log('camera position changed', evt.detail.newData);

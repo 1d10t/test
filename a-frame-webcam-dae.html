@@ -153,9 +153,9 @@ AFRAME.registerComponent('compass-rotation', {
 		
 		if(this.data.orientationEvent == 'auto'){
 			if('ondeviceorientationabsolute' in window){
-				this.data.orientationEvent = 'ondeviceorientationabsolute';
+				this.data.orientationEvent = 'deviceorientationabsolute';
 			}else if('ondeviceorientation' in window){
-				this.data.orientationEvent = 'ondeviceorientation';
+				this.data.orientationEvent = 'deviceorientation';
 			}else{
 				this.data.orientationEvent = '';
 				alert('Compass not supported');
@@ -222,7 +222,7 @@ AFRAME.registerComponent('compass-rotation', {
 		
 		var heading = null;
 		
-		console.log('device orientation event', evt);
+		//console.log('device orientation event', evt);
 		
 		if(typeof(evt.webkitCompassHeading) != 'undefined'){
 			

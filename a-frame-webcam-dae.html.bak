@@ -222,7 +222,7 @@ AFRAME.registerComponent('compass-rotation', {
 		
 		var heading = null;
 		
-		console.log('device orientation event', evt);
+		//console.log('device orientation event', evt);
 		
 		if(typeof(evt.webkitCompassHeading) != 'undefined'){
 			
@@ -310,13 +310,15 @@ window.onload = function(){
 				;
 				camera_p_x.innerText = evt.detail.newData.x;
 				camera_p_z.innerText = evt.detail.newData.z;
-				if(gpsPosition && gpsPosition.crd){
-					crd_longitude.innerText = gpsPosition.crd.longitude;
-					crd_latitude.innerText = gpsPosition.crd.latitude;
-				}
-				if(gpsPosition && gpsPosition.zeroCrd){
-					zero_crd_longitude.innerText = gpsPosition.zeroCrd.longitude;
-					zero_crd_latitude.innerText = gpsPosition.zeroCrd.latitude;
+				if(gpsPosition){
+					if(gpsPosition.crd){
+						crd_longitude.innerText = gpsPosition.crd.longitude;
+						crd_latitude.innerText = gpsPosition.crd.latitude;
+					}
+					if(gpsPosition.zeroCrd){
+						zero_crd_longitude.innerText = gpsPosition.zeroCrd.longitude;
+						zero_crd_latitude.innerText = gpsPosition.zeroCrd.latitude;
+					}
 				}
 				break;
 		}

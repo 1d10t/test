@@ -91,7 +91,7 @@ AFRAME.registerComponent('gps-position', {
 			}
 		) * (
 			this.crd.longitude > this.zeroCrd.longitude
-				? -1 : 1
+				? 1 : -1
 		);
 		p.z = this.calcMeters(
 			this.zeroCrd,
@@ -101,7 +101,7 @@ AFRAME.registerComponent('gps-position', {
 			}
 		) * (
 			this.crd.latitude > this.zeroCrd.latitude
-				? 1 : -1
+				? -1 : 1
 		);
 		
 		this.el.setAttribute('position', p);
@@ -337,7 +337,7 @@ AFRAME.registerComponent('gps-place', {
 			}
 		) * (
 			this.data.longitude > this.cameraGpsPosition.zeroCrd.longitude
-				? -1 : 1
+				? 1 : -1
 		);
 		p.z = this.cameraGpsPosition.calcMeters(
 			this.zeroCrd,
@@ -347,7 +347,7 @@ AFRAME.registerComponent('gps-place', {
 			}
 		) * (
 			this.data.latitude > this.cameraGpsPosition.zeroCrd.latitude
-				? 1 : -1
+				? -1 : 1
 		);
 		
 		this.el.setAttribute('position', p);

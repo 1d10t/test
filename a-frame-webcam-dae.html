@@ -330,7 +330,7 @@ AFRAME.registerComponent('gps-place', {
 		var p = {x: 0, y: 0, z: 0};
 		
 		p.x = this.cameraGpsPosition.calcMeters(
-			this.zeroCrd,
+			this.cameraGpsPosition.zeroCrd,
 			{
 				longitude: this.data.longitude,
 				latitude: this.cameraGpsPosition.zeroCrd.latitude
@@ -340,7 +340,7 @@ AFRAME.registerComponent('gps-place', {
 				? 1 : -1
 		);
 		p.z = this.cameraGpsPosition.calcMeters(
-			this.zeroCrd,
+			this.cameraGpsPosition.zeroCrd,
 			{
 				longitude: this.cameraGpsPosition.zeroCrd.longitude,
 				latitude: this.data.latitude

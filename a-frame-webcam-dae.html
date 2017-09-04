@@ -357,11 +357,58 @@ AFRAME.registerComponent('gps-place', {
 	
 });
 
+var hash_fences = {};
+
+function ce(t,a){ var f = document.createElement(t); for(var k in a) f.setAttribute(k, a[k]); return f; }
+
+function load_hash(d){
+	
+	hash_fences[d.hash] = d.objects;
+	
+	for(var i=0; i<d.objects; i++){
+		
+		var
+			o = d.objects[i],
+			element_id = 'fence_' + o.id.replace(':', '_')
+		;
+		
+		if(!document.getElementById(element_id)){
+			
+			fences.appendChild( ce(
+				'a-collada-model',
+				{
+					'id': element_id,
+					'src': 'https://yaglov.ru/cadastre/fence.php?id='+encodeURIComponent(o.id),
+					'gps-place': 'longitude: '+o.extent.xmin+'; latitude: '+o.extent.ymin,
+					'transparent-texture': ''
+				}
+			) );
+			
+		}
+		
+	}
+	
+}
+
+function show_fences(fs){
+	
+	fences.appendChild( ce(
+		'a-collada-model',
+		{
+			'id': 'ff4',
+			'src': 'fence_50_31_0040507_25.dae',
+			'gps-place': 'longitude: 37.470757400759; latitude: 55.153190379075',
+			'transparent-texture': ''
+		}
+	) );
+	
+}
+
+
 
 window.onload = function(){
 	
 	var camera = document.getElementById('camera');
-	
 	
 	camera.addEventListener('componentchanged', function (evt) {
 		switch(evt.detail.name){
@@ -390,7 +437,17 @@ window.onload = function(){
 					if(gpsPosition.crd){
 						crd_longitude.innerText = gpsPosition.crd.longitude;
 						crd_latitude.innerText = gpsPosition.crd.latitude;
-						geohash_7chars.innerText = Geohash.encode(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 7);
+						
+						var hash = Geohash.encode(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 7);
+						geohash_7chars.innerText = hash;
+						
+						if(typeof(hash_fences[hash]) == 'undefined'){
+							hash_fences[hash] = null;
+							document.head.appendChild(ce('script', {
+								src: 'https://yaglov.ru/cadastre/geohash.php?hash='+hash+'&callback=load_hash'
+							}));
+						}
+						
 					}
 					if(gpsPosition.zeroCrd){
 						zero_crd_longitude.innerText = gpsPosition.zeroCrd.longitude;
@@ -430,17 +487,21 @@ window.onload = function(){
 		<a-camera id="camera" user-height="1.6" gps-position compass-rotation><!--  --></a-camera>
 		
 		<a-assets id="assets">
+			<!--
 			<a-asset-item id="fence_50_31_0040507_9_asset" src="fence_50_31_0040507_9.dae"></a-asset-item>
 			<a-asset-item id="fence_50_31_0040507_6_asset" src="fence_50_31_0040507_6.dae"></a-asset-item>
 			<a-asset-item id="fence_50_31_0040507_16_asset" src="fence_50_31_0040507_16.dae"></a-asset-item>
 			<a-asset-item id="fence_50_31_0040507_25_asset" src="fence_50_31_0040507_25.dae"></a-asset-item>
+			-->
 		</a-assets>
 		
 		<a-entity id="fences">
+			<!--
 			<a-entity id="fence_50_31_0040507_9" collada-model="#fence_50_31_0040507_9_asset" transparent-texture gps-place="longitude: 37.469666813539; latitude: 55.153989996861"></a-entity>
 			<a-entity id="fence_50_31_0040507_6" collada-model="#fence_50_31_0040507_6_asset" transparent-texture gps-place="longitude: 37.469775988244; latitude: 55.154190366984"></a-entity>
 			<a-entity id="fence_50_31_0040507_16" collada-model="#fence_50_31_0040507_16_asset" transparent-texture gps-place="longitude: 37.469140087271; latitude: 55.153874109378"></a-entity>
 			<a-entity id="fence_50_31_0040507_25" collada-model="#fence_50_31_0040507_25_asset" transparent-texture gps-place="longitude: 37.470954400759; latitude: 55.153490379075"></a-entity>
+			-->
 		</a-entity>
 		
 	</a-scene>

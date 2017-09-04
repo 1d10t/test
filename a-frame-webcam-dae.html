@@ -390,20 +390,6 @@ function load_hash(d){
 	
 }
 
-function show_fences(fs){
-	
-	fences.appendChild( ce(
-		'a-collada-model',
-		{
-			'id': 'ff4',
-			'src': 'fence_50_31_0040507_25.dae',
-			'gps-place': 'longitude: 37.470757400759; latitude: 55.153190379075',
-			'transparent-texture': ''
-		}
-	) );
-	
-}
-
 
 
 window.onload = function(){
@@ -444,7 +430,7 @@ window.onload = function(){
 						if(typeof(hash_fences[hash]) == 'undefined'){
 							hash_fences[hash] = null;
 							document.head.appendChild(ce('script', {
-								src: 'https://yaglov.ru/cadastre/geohash.php?hash='+hash+'&callback=load_hash'
+								src: 'https://yaglov.ru/cadastre/hash.php?hash='+hash+'&callback=load_hash'
 							}));
 						}
 						

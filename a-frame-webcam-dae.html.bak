@@ -437,14 +437,17 @@ window.onload = function(){
 					if(gpsPosition.crd){
 						crd_longitude.innerText = gpsPosition.crd.longitude;
 						crd_latitude.innerText = gpsPosition.crd.latitude;
+						
 						var hash = Geohash.encode(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 7);
 						geohash_7chars.innerText = hash;
+						
 						if(typeof(hash_fences[hash]) == 'undefined'){
 							hash_fences[hash] = null;
 							document.head.appendChild(ce('script', {
 								src: 'https://yaglov.ru/cadastre/geohash.php?hash='+hash+'&callback=load_hash'
 							}));
 						}
+						
 					}
 					if(gpsPosition.zeroCrd){
 						zero_crd_longitude.innerText = gpsPosition.zeroCrd.longitude;

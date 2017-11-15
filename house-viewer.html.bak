@@ -430,7 +430,7 @@ window.onload = function(){
 				break;
 			case 'position':
 				
-				if(gpsPosition.crd)
+				//if(gpsPosition.crd)
 					controls.style.display = 'block';
 				
 				break;

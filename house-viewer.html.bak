@@ -357,25 +357,117 @@ AFRAME.registerComponent('gps-place', {
 	
 });
 
+var house_models = [];
+
+function ce(t,a){ var f = document.createElement(t); for(var k in a) f.setAttribute(k, a[k]); return f; }
+
+function load_houses(d){
+	
+	house_models = d;
+	
+	if(!d || !d.length) return;
+	
+	
+	
+	for(var v=0; v<d.length; v++){
+		var o = ce(
+			'option',
+			{
+				'value': v,
+			}
+		);
+		o.innerText = decodeURIComponent(d[v].match(/\/([^\/+])\/[^\/+]$/)[1]);
+		house_selector.appendChild( o );
+	}
+	
+}
+
+
+function put_house(i){
+	
+	if(typeof(house_models[i]) == 'undefined' || !house_models[i]) return;
+	
+	var id = 'house_'+i;
+	
+	if(document.getElementById(id)) return;
+	
+	var
+		camera = document.getElementById('camera'),
+		compassRotation = camera.components['compass-rotation'],
+		gpsPosition = camera.components['gps-position']
+	;
+	
+	houses.appendChild( ce(
+		'a-collada-model',
+		{
+			'id': id,
+			'src': house_models[i],
+			'gps-place': 'longitude: '+gpsPosition.crd.latitude+'; latitude: '+gpsPosition.crd.longitude,
+			'rotation': '0 '+compassRotation.heading+' 0'
+			'transparent-texture': ''
+		}
+	) );
+	
+}
+
+
+window.onload = function(){
+	
+	var
+		camera = document.getElementById('camera'),
+		compassRotation = camera.components['compass-rotation'],
+		gpsPosition = camera.components['gps-position']
+	;
+	
+	document.head.appendChild(ce('script', {
+		src: 'https://yaglov.ru/cadastre/house_models.php?callback=load_houses'
+	}));
+	
+	camera.addEventListener('componentchanged', function (evt) {
+		switch(evt.detail.name){
+			case 'rotation':
+				
+				break;
+			case 'position':
+				
+				if(gpsPosition.crd)
+					controls.style.display = 'block';
+				
+				break;
+		}
+	});
+	
+};
+
 
 
 </script>
 </head>
 <body style='margin: 0px; overflow: hidden;'>
 	
+	<div id="controls" style="display: none; position: fixed; top: 10px; width:100%; text-align: center; z-index: 1; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;">
+		<div>
+			<select id="house_selector">
+			<!--
+				<option value="0"></option>
+			-->
+			</select>
+			<button id="put_button" onclick="put_house(document.getElementById('house_selector').value); return false;">put</button>
+		</div>
+	</div>
+	
 	<a-scene embedded artoolkit='sourceType: webcam;'><!--  -->
 		
 		<a-camera id="camera" user-height="1.6" gps-position compass-rotation><!--  --></a-camera>
 		
-		<a-assets id="assets">
-		</a-assets>
-		
-		<a-entity id="fences">
+		<a-entity id="houses">
+			<!--
 			<a-collada-model
-				id="h0"
+				id="house"
 				src="https://yaglov.ru/cadastre/house_models/A_J_ARB+-+1930%27s+Detached+House/model.dae"
-				gps-place="longitude: 55.146199; latitude: 37.467599"
+				gps-place="longitude: 55.153633; latitude: 37.469895"
 				transparent-texture>
+			-->
 		</a-entity>
 		
 	</a-scene>

@@ -376,7 +376,7 @@ function load_houses(d){
 				'value': v,
 			}
 		);
-		o.innerText = decodeURIComponent(d[v].match(/\/([^\/+])\/[^\/+]$/)[1]);
+		o.innerText = decodeURIComponent(d[v].match(/\/([^\/]+)\/[^\/]+$/)[1]);
 		house_selector.appendChild( o );
 	}
 	
@@ -397,15 +397,17 @@ function put_house(i){
 		gpsPosition = camera.components['gps-position']
 	;
 	
+	var attr = {
+		'id': id,
+		'src': house_models[i],
+		'gps-place': 'longitude: '+gpsPosition.crd.latitude+'; latitude: '+gpsPosition.crd.longitude,
+		'rotation': '0 '+parseInt(compassRotation.heading)+' 0',
+		'transparent-texture': ''
+	};
+	
 	houses.appendChild( ce(
 		'a-collada-model',
-		{
-			'id': id,
-			'src': house_models[i],
-			'gps-place': 'longitude: '+gpsPosition.crd.latitude+'; latitude: '+gpsPosition.crd.longitude,
-			'rotation': '0 '+compassRotation.heading+' 0',
-			'transparent-texture': ''
-		}
+		attr
 	) );
 	
 }

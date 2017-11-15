@@ -397,15 +397,19 @@ function put_house(i){
 		gpsPosition = camera.components['gps-position']
 	;
 	
+	var attr = {
+		'id': id,
+		'src': house_models[i],
+		'gps-place': 'longitude: '+gpsPosition.crd.latitude+'; latitude: '+gpsPosition.crd.longitude,
+		'rotation': '0 '+parseInt(compassRotation.heading)+' 0',
+		'transparent-texture': ''
+	};
+	
+	console.log('add house:', attr);
+	
 	houses.appendChild( ce(
 		'a-collada-model',
-		{
-			'id': id,
-			'src': house_models[i],
-			'gps-place': 'longitude: '+gpsPosition.crd.latitude+'; latitude: '+gpsPosition.crd.longitude,
-			'rotation': '0 '+compassRotation.heading+' 0',
-			'transparent-texture': ''
-		}
+		attr
 	) );
 	
 }

@@ -400,7 +400,7 @@ function put_house(i){
 	var attr = {
 		'id': id,
 		'src': house_models[i],
-		'gps-place': 'longitude: '+gpsPosition.crd.latitude+'; latitude: '+gpsPosition.crd.longitude,
+		'gps-place': 'latitude: '+gpsPosition.crd.latitude+'; longitude: '+gpsPosition.crd.longitude,
 		'rotation': '0 '+parseInt(compassRotation.heading)+' 0',
 		'transparent-texture': ''
 	};

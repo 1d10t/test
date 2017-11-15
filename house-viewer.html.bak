@@ -405,6 +405,8 @@ function put_house(i){
 		'transparent-texture': ''
 	};
 	
+	console.log('add house:', attr);
+	
 	houses.appendChild( ce(
 		'a-collada-model',
 		attr

@@ -376,7 +376,7 @@ function load_houses(d){
 				'value': v,
 			}
 		);
-		o.innerText = decodeURIComponent(d[v].match(/\/([^\/+])\/[^\/+]$/)[1]);
+		o.innerText = decodeURIComponent(d[v].match(/\/([^\/]+)\/[^\/]+$/)[1]);
 		house_selector.appendChild( o );
 	}
 	

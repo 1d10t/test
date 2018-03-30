@@ -399,7 +399,7 @@ window.onload = function(){
 	camera.addEventListener('componentchanged', function (evt) {
 		switch(evt.detail.name){
 			case 'rotation':
-				console.log('camera rotation changed', evt.detail.newData);
+				console.log('camera rotation changed', evt);
 				var
 					compassRotation = camera.components['compass-rotation'],
 					lookControls = camera.components['look-controls']
@@ -413,7 +413,7 @@ window.onload = function(){
 				}
 				break;
 			case 'position':
-				console.log('camera position changed', evt.detail.newData);
+				console.log('camera position changed', evt);
 				var
 					gpsPosition = camera.components['gps-position']
 				;

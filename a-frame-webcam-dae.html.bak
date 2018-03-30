@@ -399,12 +399,13 @@ window.onload = function(){
 	camera.addEventListener('componentchanged', function (evt) {
 		switch(evt.detail.name){
 			case 'rotation':
-				console.log('camera rotation changed', evt);
+				var newData = evt.target.getAttribute('rotation');
+				console.log('camera rotation changed', newData);
 				var
 					compassRotation = camera.components['compass-rotation'],
 					lookControls = camera.components['look-controls']
 				;
-				camera_angle.innerText = evt.detail.newData.y;
+				camera_angle.innerText = newData.y;
 				if(lookControls){
 					yaw_angle.innerText = THREE.Math.radToDeg(lookControls.yawObject.rotation.y);
 				}
@@ -413,12 +414,13 @@ window.onload = function(){
 				}
 				break;
 			case 'position':
-				console.log('camera position changed', evt);
+				var newData = evt.target.getAttribute('position');
+				console.log('camera position changed', newData);
 				var
 					gpsPosition = camera.components['gps-position']
 				;
-				camera_p_x.innerText = evt.detail.newData.x;
-				camera_p_z.innerText = evt.detail.newData.z;
+				camera_p_x.innerText = newData.x;
+				camera_p_z.innerText = newData.z;
 				if(gpsPosition){
 					if(gpsPosition.crd){
 						crd_longitude.innerText = gpsPosition.crd.longitude;

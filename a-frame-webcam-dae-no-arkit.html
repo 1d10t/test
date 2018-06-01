@@ -402,8 +402,8 @@ var initBGWebcam = function(onReady, onError){
 		domElement.setAttribute('autoplay', '');
 		domElement.setAttribute('muted', '');
 		domElement.setAttribute('playsinline', '');
-		domElement.style.width = this.parameters.displayWidth+'px';
-		domElement.style.height = this.parameters.displayHeight+'px';
+		domElement.style.width = 640+'px';
+		domElement.style.height = 480+'px';
 		
 		// check API is available
 		if (navigator.mediaDevices === undefined 
@@ -427,12 +427,12 @@ var initBGWebcam = function(onReady, onError){
 				video: {
 					facingMode: 'environment',
 					width: {
-						ideal: _this.parameters.sourceWidth,
+						ideal: 640,
 						// min: 1024,
 						// max: 1920
 					},
 					height: {
-						ideal: _this.parameters.sourceHeight,
+						ideal: 480,
 						// min: 776,
 						// max: 1080
 					}

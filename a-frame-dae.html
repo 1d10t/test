@@ -449,7 +449,7 @@ window.onload = function(){
 	});
 	
 	
-	(function toggleFullScreen() {
+	setTimeout(function toggleFullScreen() {
 		var doc = window.document;
 		var docEl = doc.documentElement;
 		
@@ -461,7 +461,8 @@ window.onload = function(){
 		} else {
 			cancelFullScreen.call(doc);
 	 	}
-	})();
+	}, 100);
+	
 	
 };
 

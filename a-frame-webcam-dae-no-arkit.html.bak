@@ -591,8 +591,6 @@ window.onload = function(){
 			-->
 		</a-entity>
 		
-		<a-sky></a-sky>
-		
 	</a-scene>
 </body>
 </html>

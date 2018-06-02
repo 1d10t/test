@@ -153,9 +153,9 @@ AFRAME.registerComponent('compass-rotation', {
 		this.handlerOrientation = this.handlerOrientation.bind(this);
 		
 		if(this.data.orientationEvent == 'auto'){
-			/*if('ondeviceorientationabsolute' in window){
+			if('ondeviceorientationabsolute' in window){
 				this.data.orientationEvent = 'deviceorientationabsolute';
-			}else */if('ondeviceorientation' in window){
+			}else if('ondeviceorientation' in window){
 				this.data.orientationEvent = 'deviceorientation';
 			}else{
 				this.data.orientationEvent = '';

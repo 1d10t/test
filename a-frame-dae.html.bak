@@ -1,7 +1,11 @@
 <html>
 <head>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <script src="https://aframe.io/aframe/dist/aframe-master.min.js"></script>
+<script src="https://cdn.rawgit.com/chrisveness/latlon-geohash/53c3d474/latlon-geohash.js"></script>
 <script>
+
 AFRAME.registerComponent('transparent-texture', {
 	
 	init: function () {
@@ -443,6 +447,21 @@ window.onload = function(){
 				break;
 		}
 	});
+	
+	(function toggleFullScreen() {
+	  var doc = window.document;
+	  var docEl = doc.documentElement;
+
+	  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+	  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+	  if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+		requestFullScreen.call(docEl);
+	  }
+	  else {
+		cancelFullScreen.call(doc);
+	  }
+	})();
 	
 };
 

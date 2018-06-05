@@ -43,6 +43,21 @@ function load_hash(d){
 }
 
 
+function toggleFullScreen() {
+	var doc = window.document;
+	var docEl = doc.documentElement;
+	
+	var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+	var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+	
+	if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+		requestFullScreen.call(docEl);
+	} else {
+		cancelFullScreen.call(doc);
+	}
+}
+
+
 
 window.onload = function(){
 	
@@ -50,69 +65,54 @@ window.onload = function(){
 	
 	camera.addEventListener('componentchanged', function (evt) {
 		switch(evt.detail.name){
-			case 'rotation':
-				var newData = evt.target.getAttribute('rotation');
-				console.log('camera rotation changed', newData);
-				var
-					compassRotation = camera.components['compass-rotation'],
-					lookControls = camera.components['look-controls']
-				;
-				camera_angle.innerText = newData.y;
-				if(lookControls){
-					yaw_angle.innerText = THREE.Math.radToDeg(lookControls.yawObject.rotation.y);
-				}
-				if(compassRotation){
-					compass_heading.innerText = compassRotation.heading;
-				}
-				break;
-			case 'position':
-				var newData = evt.target.getAttribute('position');
-				console.log('camera position changed', newData);
-				var
-					gpsPosition = camera.components['gps-position']
-				;
-				camera_p_x.innerText = newData.x;
-				camera_p_z.innerText = newData.z;
-				if(gpsPosition){
-					if(gpsPosition.crd){
-						crd_longitude.innerText = gpsPosition.crd.longitude;
-						crd_latitude.innerText = gpsPosition.crd.latitude;
-						
-						var hash = Geohash.encode(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 7);
-						geohash_7chars.innerText = hash;
-						
-						if(typeof(hash_fences[hash]) == 'undefined'){
-							hash_fences[hash] = null;
-							document.head.appendChild(ce('script', {
-								src: 'https://yaglov.ru/cadastre/hash.php?hash='+hash+'&callback=load_hash'
-							}));
-						}
-						
+		case 'rotation':
+			var newData = evt.target.getAttribute('rotation');
+			console.log('camera rotation changed', newData);
+			var
+				compassRotation = camera.components['compass-rotation'],
+				lookControls = camera.components['look-controls']
+			;
+			camera_angle.innerText = newData.y;
+			if(lookControls){
+				yaw_angle.innerText = THREE.Math.radToDeg(lookControls.yawObject.rotation.y);
+			}
+			if(compassRotation){
+				compass_heading.innerText = compassRotation.heading;
+			}
+			break;
+		case 'position':
+			var newData = evt.target.getAttribute('position');
+			console.log('camera position changed', newData);
+			var
+				gpsPosition = camera.components['gps-position']
+			;
+			camera_p_x.innerText = newData.x;
+			camera_p_z.innerText = newData.z;
+			if(gpsPosition){
+				if(gpsPosition.crd){
+					crd_longitude.innerText = gpsPosition.crd.longitude;
+					crd_latitude.innerText = gpsPosition.crd.latitude;
+					
+					var hash = Geohash.encode(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 7);
+					geohash_7chars.innerText = hash;
+					
+					if(typeof(hash_fences[hash]) == 'undefined'){
+						hash_fences[hash] = null;
+						document.head.appendChild(ce('script', {
+							src: 'https://yaglov.ru/cadastre/hash.php?hash='+hash+'&callback=load_hash'
+						}));
 					}
-					if(gpsPosition.zeroCrd){
-						zero_crd_longitude.innerText = gpsPosition.zeroCrd.longitude;
-						zero_crd_latitude.innerText = gpsPosition.zeroCrd.latitude;
-					}
+					
 				}
-				
-				break;
+				if(gpsPosition.zeroCrd){
+					zero_crd_longitude.innerText = gpsPosition.zeroCrd.longitude;
+					zero_crd_latitude.innerText = gpsPosition.zeroCrd.latitude;
+				}
+			}
+			
+			break;
 		}
 	});
-	
-	
-	setTimeout(function toggleFullScreen() {
-		var doc = window.document;
-		var docEl = doc.documentElement;
-		
-		var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-		var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-		
-		if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-			requestFullScreen.call(docEl);
-		} else {
-			cancelFullScreen.call(doc);
-	 	}
-	}, 100);
 	
 	
 };

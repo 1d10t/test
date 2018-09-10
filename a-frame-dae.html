@@ -9,6 +9,17 @@
 
 
 
+AFRAME.registerComponent('cursor-listener', {
+	init: function () {
+		this.el.addEventListener('click', function (evt) {
+			//this.setAttribute('material', 'color', COLORS[lastIndex]);
+			//console.log('I was clicked at: ', evt.detail.intersection.point);
+			alert('I was clicked at: ', this.el.dataset.cn);
+		});
+	}
+});
+
+
 var hash_fences = {};
 
 function ce(t,a){ var f = document.createElement(t); for(var k in a) f.setAttribute(k, a[k]); return f; }

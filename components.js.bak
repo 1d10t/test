@@ -356,7 +356,7 @@ AFRAME.registerComponent('cursor-listener', {
 		this.el.addEventListener('click', function (evt) {
 			//this.setAttribute('material', 'color', COLORS[lastIndex]);
 			//console.log('I was clicked at: ', evt.detail.intersection.point);
-			console.log('I was clicked at: ', this.el.dataset.cn);
+			alert('I was clicked at: ', this.el.dataset.cn);
 		});
 	}
 });

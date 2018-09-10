@@ -350,13 +350,3 @@ AFRAME.registerComponent('gps-place', {
 	
 });
 
-
-AFRAME.registerComponent('cursor-listener', {
-	init: function () {
-		this.el.addEventListener('click', function (evt) {
-			//this.setAttribute('material', 'color', COLORS[lastIndex]);
-			//console.log('I was clicked at: ', evt.detail.intersection.point);
-			alert('I was clicked at: ', this.el.dataset.cn);
-		});
-	}
-});

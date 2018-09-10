@@ -32,7 +32,9 @@ function load_hash(d){
 					'id': element_id,
 					'src': 'https://yaglov.ru/cadastre/fence.php?id='+encodeURIComponent(o.id),
 					'gps-place': 'longitude: '+o.extent.xmin+'; latitude: '+o.extent.ymin,
-					'transparent-texture': ''
+					'transparent-texture': '',
+					'cursor-listener': '',
+					'data-cn': o.id
 				}
 			) );
 			

@@ -32,7 +32,8 @@ function load_hash(d){
 					'id': element_id,
 					'src': 'https://yaglov.ru/cadastre/fence.php?id='+encodeURIComponent(o.id),
 					'gps-place': 'longitude: '+o.extent.xmin+'; latitude: '+o.extent.ymin,
-					'transparent-texture': ''
+					'transparent-texture': '',
+					'cursor-listener': ''
 				}
 			) );
 			
@@ -140,7 +141,9 @@ window.onload = function(){
 	
 	<a-scene><!--  -->
 		
-		<a-camera id="camera" user-height="1.6" gps-position compass-rotation><!--  --></a-camera>
+		<a-camera id="camera" user-height="1.6" gps-position compass-rotation>
+			<a-cursor></a-cursor>
+		</a-camera>
 		
 		<a-assets id="assets">
 			<!--

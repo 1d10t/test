@@ -39,6 +39,10 @@ AFRAME.registerComponent('gps-position', {
 		'zero-crd-longitude': {
 			type: 'number',
 			default: NaN
+		},
+		'position-callback': {
+			type: 'string',
+			default: ''
 		}
 	},
 	
@@ -49,6 +53,8 @@ AFRAME.registerComponent('gps-position', {
 		}
 		
 		this.watchId = this.watchGPS(function(position){
+			if(this.data['position-callback'].length)
+				position = eval(this.data['position-callback'])(position);
 			this.crd = position.coords;
 			this.updatePosition();
 		}.bind(this));

@@ -32,15 +32,15 @@ AFRAME.registerComponent('gps-position', {
 			type: 'int',
 			default: 100
 		},
-		'zero-crd-latitude': {
+		zeroCrdLatitude: {
 			type: 'number',
 			default: NaN
 		},
-		'zero-crd-longitude': {
+		zeroCrdLongitude: {
 			type: 'number',
 			default: NaN
 		},
-		'position-callback': {
+		positionCallback: {
 			type: 'string',
 			default: ''
 		}
@@ -48,13 +48,13 @@ AFRAME.registerComponent('gps-position', {
 	
 	init: function () {
 		
-		if(!isNaN(this.data['zero-crd-latitude']) && !isNaN(this.data['zero-crd-longitude'])){
-			this.zeroCrd = {latitude: this.data['zero-crd-latitude'], longitude: this.data['zero-crd-longitude']};
+		if(!isNaN(this.data.zeroCrdLatitude) && !isNaN(this.data.zeroCrdLongitude)){
+			this.zeroCrd = {latitude: this.data.zeroCrdLatitude, longitude: this.data.zeroCrdLongitude};
 		}
 		
 		this.watchId = this.watchGPS(function(position){
-			if(this.data['position-callback'].length)
-				position = eval(this.data['position-callback'])(position);
+			if(this.data.positionCallback.length)
+				position = eval(this.data.positionCallback)(position);
 			this.crd = position.coords;
 			this.updatePosition();
 		}.bind(this));

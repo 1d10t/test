@@ -141,7 +141,7 @@ function smooth_gps(p){
 				accuracy: locationObject.stddev_accuracy,
 				latitude: locationObject.stddev_lat,
 				longitude: locationObject.stddev_lon,
-			}
+			},
 			timestamp: p.timestamp
 		}
 	})

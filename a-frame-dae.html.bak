@@ -4,7 +4,6 @@
 <meta name="mobile-web-app-capable" content="yes">
 <script src="https://aframe.io/aframe/dist/aframe-master.min.js"></script>
 <script src="https://cdn.rawgit.com/chrisveness/latlon-geohash/53c3d474/latlon-geohash.js"></script>
-<script src="https://cdn.rawgit.com/Esri/html5-geolocation-tool-js/cdd20903/js/GeolocationHelper.js"></script>
 <script src="components.js"></script>
 <script>
 
@@ -131,36 +130,6 @@ window.onload = function(){
 	
 };
 
-var geoHelper = new GeolocationHelper({
-	/*
-	"UNITS" in filters ? this.UNITS = filters.UNITS : this.UNITS = "M"; // M = miles, K = km, N = nautical miles
-	"MAX_ACCURACY" in filters ? this.MAX_ACCURACY = filters.MAX_ACCURACY : this.MAX_ACCURACY = 100 ;
-	"MAX_MEDIAN_ACCURACY" in filters ? this.MAX_MEDIAN_ACCURACY = filters.MAX_MEDIAN_ACCURACY : this.MAX_MEDIAN_ACCURACY = 20;
-	"MAX_STDDEVIATION_ACCURACY" in filters ? this.MAX_STDDEVIATION_ACCURACY = filters.MAX_STDDEVIATION_ACCURACY : this.MAX_STDDEVIATION_ACCURACY = 2.5;
-	"MAX_STDDEVIATION_LAT" in filters ? this.MAX_STDDEVIATION_LAT = filters.MAX_STDDEVIATION_LAT : this.MAX_STDDEVIATION_LAT = 0.0001;
-	"MAX_STDDEVIATION_LON" in filters ? this.MAX_STDDEVIATION_LON = filters.MAX_STDDEVIATION_LON : this.MAX_STDDEVIATION_LON = 0.0001;
-	"MAX_ARRAY_SIZE" in filters ? this.MAX_ARRAY_SIZE = filters.MAX_ARRAY_SIZE : this.MAX_ARRAY_SIZE = 25;
-	*/
-});
-
-function smooth_gps(p){
-	
-	var np;
-	
-	geoHelper.process(p.coords.accuracy, p.coords.latitude, p.coords.longitude, p.timestamp, function(locationObject){
-		np = {
-			coords: {
-				accuracy: locationObject.stddev_accuracy,
-				latitude: locationObject.stddev_lat,
-				longitude: locationObject.stddev_lon,
-			}
-			timestamp: p.timestamp
-		}
-	})
-	
-	return np;
-}
-
 
 </script>
 </head>
@@ -184,7 +153,7 @@ function smooth_gps(p){
 	
 	<a-scene><!--  -->
 		
-		<a-camera id="camera" user-height="1.6" gps-position="position-callback: smooth_gps" compass-rotation>
+		<a-camera id="camera" user-height="1.6" gps-position compass-rotation>
 			<a-cursor></a-cursor>
 		</a-camera>
 		

@@ -1,0 +1,305 @@
+<html>
+<head>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<script src="https://aframe.io/aframe/dist/aframe-master.min.js"></script>
+<script src="https://cdn.rawgit.com/chrisveness/latlon-geohash/53c3d474/latlon-geohash.js"></script>
+<script src="components.js?3:54 28.09.2018"></script>
+<script>
+
+
+
+MERCATOR = {
+	
+	fromLatLngToPoint: function(latLng){
+		var siny = Math.min(
+			Math.max(
+				Math.sin(latLng.lat * (Math.PI / 180)), 
+				-.9999
+			),
+			.9999
+		);
+		return {
+			x: 128 + latLng.lng * (256/360),
+			y: 128 + 0.5 * Math.log((1 + siny) / (1 - siny)) * - (256 / (2 * Math.PI))
+		};
+	},
+	
+	fromPointToLatLng: function(point){
+		return {
+			lat: (2 * Math.atan(Math.exp((point.y - 128) / -(256 / (2 * Math.PI)))) - Math.PI / 2)/ (Math.PI / 180),
+			lng: (point.x - 128) / (256 / 360)
+		};
+		
+	},
+	
+	getTileAtLatLng: function(latLng, zoom){
+		var
+			t = Math.pow(2, zoom),
+			s = 256/t,
+			p = this.fromLatLngToPoint(latLng)
+		;
+		return {
+			x: Math.floor(p.x/s),
+			y: Math.floor(p.y/s),
+			z: zoom
+		};
+	},
+	
+	getTileBounds: function(tile){
+		tile = this.normalizeTile(tile);
+		var
+			t = Math.pow(2, tile.z),
+			s = 256/t,
+			sw = {
+				x: tile.x*s,
+				y: (tile.y*s) + s
+			},
+			ne = {
+				x: tile.x*s + s,
+				y: (tile.y*s)
+			}
+		;
+		return {
+			sw: this.fromPointToLatLng(sw),
+			ne: this.fromPointToLatLng(ne)
+		};
+	},
+	
+	normalizeTile: function(tile){
+		var t = Math.pow(2, tile.z);
+		tile.x = ((tile.x%t)+t)%t;
+		tile.y = ((tile.y%t)+t)%t;
+		return tile;
+	}
+	
+}
+
+function mturl(latitude,longitude,zoom,type){
+	/*
+	sat
+	http://mt0.google.com/vt/lyrs=s&x=1325&y=3143&z=13
+
+	hyb
+	http://mt0.google.com/vt/lyrs=y&x=1325&y=3143&z=13
+
+	sat+traf
+	http://mt0.google.com/vt/lyrs=s@221097413,traffic&x=1325&y=3143&z=13
+
+	h = roads only
+	m = standard roadmap
+	p = terrain
+	r = somehow altered roadmap
+	s = satellite only
+	t = terrain only
+	y = hybrid
+	*/
+	if(typeof(type) != 'string') type = 'y';
+	var xyz = MERCATOR.getTileAtLatLng({lat:latitude,lng:longitude},zoom);
+	return 'http://mt'+parseInt(Math.random()*4)+'.google.com/vt/lyrs='+type+'&x='+xyz.x+'&y='+xyz.y+'&z='+zoom;
+}
+
+/*
+
+(function mturl(latitude,longitude,zoom){
+	var xyz = MERCATOR.getTileAtLatLng({lat: latitude, lng: longitude}, zoom);
+	return 'http://mt0.google.com/vt/lyrs=y&x='+xyz.x+'&y='+xyz.y+'&z='+zoom;
+})(55.1532964, 37.4693835, 18)
+
+
+http://mt0.google.com/vt/lyrs=y&x=158356&y=82720&z=18
+
+MERCATOR.getTileBounds({x:158356,y:82731,z:18})
+
+ne:
+lat: 55.1451340140052
+lng: 37.470245361328125
+sw:
+lat: 55.14434917097695
+lng: 37.4688720703125
+
+*/
+
+
+var hash_fences = {};
+
+function ce(t,a){ var f = document.createElement(t); for(var k in a) f.setAttribute(k, a[k]); return f; }
+
+function load_hash(d){
+	
+	hash_fences[d.hash] = d.objects;
+	
+	for(var i=0; i<d.objects.length; i++){
+		
+		var
+			o = d.objects[i],
+			element_id = 'fence_' + o.id.replace(':', '_')
+		;
+		
+		if(!document.getElementById(element_id)){
+			
+			fences.appendChild( ce(
+				'a-collada-model',
+				{
+					'id': element_id,
+					'src': 'https://yaglov.ru/cadastre/fence.php?id='+encodeURIComponent(o.id),
+					'gps-place': 'longitude: '+o.extent.xmin+'; latitude: '+o.extent.ymin,
+					'transparent-texture': '',
+					'data-cn': o.id
+				}
+			) );
+			
+		}
+		
+	}
+	
+}
+
+
+
+
+window.onload = function(){
+	
+	var camera = document.getElementById('camera');
+	
+	camera.addEventListener('componentchanged', function (evt) {
+		switch(evt.detail.name){
+		case 'rotation':
+			var newData = evt.target.getAttribute('rotation');
+			console.log('camera rotation changed', newData);
+			var
+				compassRotation = camera.components['compass-rotation'],
+				lookControls = camera.components['look-controls']
+			;
+			camera_angle.innerText = newData.y;
+			if(lookControls){
+				yaw_angle.innerText = THREE.Math.radToDeg(lookControls.yawObject.rotation.y);
+			}
+			if(compassRotation){
+				compass_heading.innerText = compassRotation.heading;
+			}
+			break;
+		case 'position':
+			var newData = evt.target.getAttribute('position');
+			console.log('camera position changed', newData);
+			var
+				gpsPosition = camera.components['gps-position']
+			;
+			camera_p_x.innerText = newData.x;
+			camera_p_z.innerText = newData.z;
+			if(gpsPosition){
+				if(gpsPosition.crd){
+					crd_longitude.innerText = gpsPosition.crd.longitude;
+					crd_latitude.innerText = gpsPosition.crd.latitude;
+					
+					var hash = Geohash.encode(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 7);
+					geohash_7chars.innerText = hash;
+					
+					if(typeof(hash_fences[hash]) == 'undefined'){
+						hash_fences[hash] = null;
+						document.head.appendChild(ce('script', {
+							src: 'https://yaglov.ru/cadastre/hash.php?hash='+hash+'&callback=load_hash'
+						}));
+					}
+					
+					var tile_type = 'y';
+					var tile_zoom = 18;
+					var xyz = MERCATOR.getTileAtLatLng({lat: gpsPosition.crd.latitude, lng: gpsPosition.crd.longitude}, tile_zoom);
+					var tile_url = 'http://mt'+parseInt(Math.random()*4)+'.google.com/vt/lyrs='+tile_type+'&x='+xyz.x+'&y='+xyz.y+'&z='+tile_zoom;
+					
+					var tile_width = 84.5, tile_height = 84.5;
+					
+					var tile_bounds = MERCATOR.getTileBounds({x: xyz.x, y: xyz.y, z: tile_zoom});
+					/*tile_width = gpsPosition.calcMeters(
+						this.cameraGpsPosition.zeroCrd,
+						{
+							longitude: this.data.longitude,
+							latitude: this.cameraGpsPosition.zeroCrd.latitude
+						}
+					)*/
+					/*
+					ne:
+					lat: 55.1451340140052
+					lng: 37.470245361328125
+					sw:
+					lat: 55.14434917097695
+					lng: 37.4688720703125
+					*/
+					ground.appendChild(ce('a-entity', {
+						geometry: "primitive: plane; height: 84.5; width: 84.5",
+						position: "0 0 0",
+						rotation: "-90 0 0",
+						material: "shader: flat; src: url(" + tile_url + ")",
+						'gps-place': "latitude: " + tile_bounds.sw.lat + "; longitude:" + tile_bounds.sw.lng
+					}));
+					
+				}
+				if(gpsPosition.zeroCrd){
+					zero_crd_longitude.innerText = gpsPosition.zeroCrd.longitude;
+					zero_crd_latitude.innerText = gpsPosition.zeroCrd.latitude;
+				}
+			}
+			
+			break;
+		}
+	});
+	
+	
+};
+
+
+</script>
+</head>
+<body style='margin: 0px; overflow: hidden;'>
+	
+	<div style="position: fixed; top: 10px; width:100%; text-align: center; z-index: 1; text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;">
+		<div>
+			coords: <span id="crd_longitude"></span>, <span id="crd_latitude"></span>
+				(zero coords: <span id="zero_crd_longitude"></span>, <span id="zero_crd_latitude"></span>)
+		</div>
+		<div>
+			camera coords: <span id="camera_p_x"></span>, <span id="camera_p_z"></span>
+		</div>
+		<div>
+			compass heading: <span id="compass_heading"></span>,
+			camera angle: <span id="camera_angle"></span>,
+			yaw angle: <span id="yaw_angle"></span>
+		</div>
+		<div>geohash_7chars: <span id="geohash_7chars"></span></div>
+	</div>
+	
+	<a-scene fog="type: linear; color: #90b7ee; far: 220; near: 0;"><!--  -->
+		
+		<a-camera id="camera" user-height="10" gps-position compass-rotation>
+			<a-cursor></a-cursor>
+		</a-camera>
+		
+		<a-assets id="assets">
+			<!--
+			<a-asset-item id="fence_50_31_0040507_9_asset" src="fence_50_31_0040507_9.dae"></a-asset-item>
+			<a-asset-item id="fence_50_31_0040507_6_asset" src="fence_50_31_0040507_6.dae"></a-asset-item>
+			<a-asset-item id="fence_50_31_0040507_16_asset" src="fence_50_31_0040507_16.dae"></a-asset-item>
+			<a-asset-item id="fence_50_31_0040507_25_asset" src="fence_50_31_0040507_25.dae"></a-asset-item>
+			-->
+		</a-assets>
+		
+		<a-entity id="fences">
+			<!--
+			<a-entity id="fence_50_31_0040507_9" collada-model="#fence_50_31_0040507_9_asset" transparent-texture gps-place="longitude: 37.469666813539; latitude: 55.153989996861"></a-entity>
+			<a-entity id="fence_50_31_0040507_6" collada-model="#fence_50_31_0040507_6_asset" transparent-texture gps-place="longitude: 37.469775988244; latitude: 55.154190366984"></a-entity>
+			<a-entity id="fence_50_31_0040507_16" collada-model="#fence_50_31_0040507_16_asset" transparent-texture gps-place="longitude: 37.469140087271; latitude: 55.153874109378"></a-entity>
+			<a-entity id="fence_50_31_0040507_25" collada-model="#fence_50_31_0040507_25_asset" transparent-texture gps-place="longitude: 37.470954400759; latitude: 55.153490379075"></a-entity>
+			-->
+		</a-entity>
+		
+		<a-entity id="ground" gmap-ground="type: y; zoom: 18">
+			<!--
+			<a-entity geometry="primitive: plane; height: 84.5; width: 84.5" position="0 -0.5 0" rotation="-90 0 0" material="shader: flat; src: url(http://mt0.google.com/vt/lyrs=y&amp;x=158356&amp;y=82731&amp;z=18)"></a-entity>
+			-->
+		</a-entity>
+		
+		<a-sky color="#a9c8e3"></a-sky>
+		
+	</a-scene>
+</body>
+</html>

@@ -227,8 +227,10 @@ window.onload = function(){
 					lat: 55.14434917097695
 					lng: 37.4688720703125
 					*/
-					if(!ground.querySelector('a-entity#'+tile_id)){
+					//if(!ground.querySelector('a-entity#'+tile_id)){
+					if(!document.getElementById(tile_id)){
 						ground.appendChild(ce('a-entity', {
+							id: tile_id,
 							geometry: 'primitive: plane; height: 84.5; width: 84.5',
 							//position: '0 0 0',
 							rotation: '-90 0 0',

@@ -226,11 +226,11 @@ window.onload = function(){
 					lng: 37.4688720703125
 					*/
 					ground.appendChild(ce('a-entity', {
-						geometry: "primitive: plane; height: 84.5; width: 84.5",
-						position: "0 0 0",
-						rotation: "-90 0 0",
-						material: "shader: flat; src: url(" + tile_url + ")",
-						'gps-place': "latitude: " + tile_bounds.sw.lat + "; longitude:" + tile_bounds.sw.lng
+						geometry: 'primitive: plane; height: 84.5; width: 84.5',
+						//position: '0 0 0',
+						rotation: '-90 0 0',
+						material: 'shader: flat; src: url(' + tile_url + ')',
+						'gps-place': 'latitude: ' + tile_bounds.sw.lat + '; longitude:' + tile_bounds.sw.lng
 					}));
 					
 				}

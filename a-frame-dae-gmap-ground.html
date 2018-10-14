@@ -205,7 +205,7 @@ window.onload = function(){
 					var tile_type = 'y';
 					var tile_zoom = 18;
 					var xyz = MERCATOR.getTileAtLatLng({lat: gpsPosition.crd.latitude, lng: gpsPosition.crd.longitude}, tile_zoom);
-					var tile_url = 'http://mt'+parseInt(Math.random()*4)+'.google.com/vt/lyrs='+tile_type+'&x='+xyz.x+'&y='+xyz.y+'&z='+tile_zoom;
+					var tile_url = '//mt'+parseInt(Math.random()*4)+'.google.com/vt/lyrs='+tile_type+'&x='+xyz.x+'&y='+xyz.y+'&z='+tile_zoom;
 					
 					var tile_width = 84.5, tile_height = 84.5;
 					

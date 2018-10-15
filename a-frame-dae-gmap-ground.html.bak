@@ -268,8 +268,11 @@ window.onload = function(){
 							src: 'https://yaglov.ru/cadastre/hash.php?hash='+hash+'&callback=load_hash'
 						}));
 					}
-					
-					load_ground_tile(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 18, 'y');
+					var olat = 0.0013;
+					var olng = 0.0013;
+					for(var tlat = gpsPosition.crd.latitude - olat; tlat <= gpsPosition.crd.latitude + olat; tlat += olat)
+					for(var tlng = gpsPosition.crd.longitude - olng; tlng <= gpsPosition.crd.longitude + olng; tlng += olng)
+						load_ground_tile(tlat, tlng, 18, 'y');
 					
 				}
 				if(gpsPosition.zeroCrd){

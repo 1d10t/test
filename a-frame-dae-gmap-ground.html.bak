@@ -157,6 +157,71 @@ function load_hash(d){
 
 
 
+function load_ground_tile(latitude, longitude, tile_zoom, tile_type){
+	if(typeof(tile_type) == 'undefined')
+		tile_type = 'y';
+	if(typeof(tile_zoom) == 'undefined')
+		tile_zoom = 18;
+	
+	var xyz = MERCATOR.getTileAtLatLng({lat: latitude, lng: longitude}, tile_zoom);
+	var tile_url = '//mt'+parseInt(Math.random()*4)+'.google.com/vt/lyrs='+tile_type+'&x='+xyz.x+'&y='+xyz.y+'&z='+tile_zoom;
+	
+	var tile_bounds = MERCATOR.getTileBounds({x: xyz.x, y: xyz.y, z: tile_zoom});
+	
+	var tile_id = 'tile_'+xyz.x+'_'+xyz.y;
+	var tile_width = gpsPosition.calcMeters(
+		{
+			longitude: tile_bounds.ne.lng,
+			latitude: tile_bounds.ne.lat
+		},
+		{
+			longitude: tile_bounds.ne.lng,
+			latitude: tile_bounds.sw.lat
+		}
+	);
+	var tile_height = gpsPosition.calcMeters(
+		{
+			longitude: tile_bounds.sw.lng,
+			latitude: tile_bounds.ne.lat
+		},
+		{
+			longitude: tile_bounds.ne.lng,
+			latitude: tile_bounds.ne.lat
+		}
+	);
+	/*
+	ne:
+	lat: 55.1451340140052
+	lng: 37.470245361328125
+	sw:
+	lat: 55.14434917097695
+	lng: 37.4688720703125
+	*/
+	//if(!ground.querySelector('a-entity#'+tile_id)){
+	if(!document.getElementById(tile_id)){
+		/*
+		ground.appendChild(ce('a-plane', {
+			id: tile_id,
+			height: tile_height,
+			width: tile_width,
+			rotation: '-90 0 0',
+			src: tile_url,
+			'gps-place': 'longitude: ' + (tile_bounds.sw.lng-(tile_bounds.sw.lng-tile_bounds.ne.lng)/2) + '; latitude: ' + (tile_bounds.sw.lat-(tile_bounds.sw.lat-tile_bounds.ne.lat)/2)
+		}));
+		*/
+		ground.appendChild(ce('a-entity', {
+			id: tile_id,
+			geometry: 'primitive: plane; height: '+tile_height+'; width: '+tile_width,
+			//position: '0 0 0',
+			rotation: '-90 0 0',
+			material: 'shader: flat; src: url(' + tile_url + ')',
+			//'gps-place': 'latitude: ' + tile_bounds.ne.lat + '; longitude:' + tile_bounds.ne.lng
+			'gps-place': 'longitude: ' + (tile_bounds.sw.lng-(tile_bounds.sw.lng-tile_bounds.ne.lng)/2) + '; latitude: ' + (tile_bounds.sw.lat-(tile_bounds.sw.lat-tile_bounds.ne.lat)/2)
+		}));
+		
+	}
+}
+
 
 window.onload = function(){
 	
@@ -202,68 +267,7 @@ window.onload = function(){
 						}));
 					}
 					
-					var tile_type = 's';
-					var tile_zoom = 18;
-					var xyz = MERCATOR.getTileAtLatLng({lat: gpsPosition.crd.latitude, lng: gpsPosition.crd.longitude}, tile_zoom);
-					var tile_url = '//mt'+parseInt(Math.random()*4)+'.google.com/vt/lyrs='+tile_type+'&x='+xyz.x+'&y='+xyz.y+'&z='+tile_zoom;
-					
-					var tile_width = 84.5, tile_height = 84.5;
-					
-					var tile_bounds = MERCATOR.getTileBounds({x: xyz.x, y: xyz.y, z: tile_zoom});
-					
-					var tile_id = 'tile_'+xyz.x+'_'+xyz.y;
-					tile_width = gpsPosition.calcMeters(
-						{
-							longitude: tile_bounds.ne.lng,
-							latitude: tile_bounds.ne.lat
-						},
-						{
-							longitude: tile_bounds.ne.lng,
-							latitude: tile_bounds.sw.lat
-						}
-					);
-					tile_height = gpsPosition.calcMeters(
-						{
-							longitude: tile_bounds.sw.lng,
-							latitude: tile_bounds.ne.lat
-						},
-						{
-							longitude: tile_bounds.ne.lng,
-							latitude: tile_bounds.ne.lat
-						}
-					);
-					/*
-					ne:
-					lat: 55.1451340140052
-					lng: 37.470245361328125
-					sw:
-					lat: 55.14434917097695
-					lng: 37.4688720703125
-					*/
-					//if(!ground.querySelector('a-entity#'+tile_id)){
-					if(!document.getElementById(tile_id)){
-						/*
-						ground.appendChild(ce('a-plane', {
-							id: tile_id,
-							height: tile_height,
-							width: tile_width,
-							rotation: '-90 0 0',
-							src: tile_url,
-							'gps-place': 'longitude: ' + (tile_bounds.sw.lng-(tile_bounds.sw.lng-tile_bounds.ne.lng)/2) + '; latitude: ' + (tile_bounds.sw.lat-(tile_bounds.sw.lat-tile_bounds.ne.lat)/2)
-						}));
-						*/
-						ground.appendChild(ce('a-entity', {
-							id: tile_id,
-							geometry: 'primitive: plane; height: '+tile_height+'; width: '+tile_width,
-							//position: '0 0 0',
-							rotation: '-90 0 0',
-							material: 'shader: flat; src: url(' + tile_url + ')',
-							//'gps-place': 'latitude: ' + tile_bounds.ne.lat + '; longitude:' + tile_bounds.ne.lng
-							'gps-place': 'longitude: ' + (tile_bounds.sw.lng-(tile_bounds.sw.lng-tile_bounds.ne.lng)/2) + '; latitude: ' + (tile_bounds.sw.lat-(tile_bounds.sw.lat-tile_bounds.ne.lat)/2)
-						}));
-						
-					}
-					
+					load_ground_tile(gpsPosition.crd.latitude, gpsPosition.crd.longitude, 18, 'y');
 					
 				}
 				if(gpsPosition.zeroCrd){

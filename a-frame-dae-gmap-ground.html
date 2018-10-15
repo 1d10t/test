@@ -163,6 +163,8 @@ function load_ground_tile(latitude, longitude, tile_zoom, tile_type){
 	if(typeof(tile_zoom) == 'undefined')
 		tile_zoom = 18;
 	
+	var gpsPosition = camera.components['gps-position'];
+	
 	var xyz = MERCATOR.getTileAtLatLng({lat: latitude, lng: longitude}, tile_zoom);
 	var tile_url = '//mt'+parseInt(Math.random()*4)+'.google.com/vt/lyrs='+tile_type+'&x='+xyz.x+'&y='+xyz.y+'&z='+tile_zoom;
 	

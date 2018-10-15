@@ -249,9 +249,9 @@ window.onload = function(){
 							rotation: '-90 0 0',
 							material: 'shader: flat; src: url(' + tile_url + ')',
 							//'gps-place': 'latitude: ' + tile_bounds.ne.lat + '; longitude:' + tile_bounds.ne.lng
-							'gps-place': 'longitude: ' + tile_bounds.sw.lng + '; latitude: ' + (tile_bounds.sw.lat-(tile_bounds.sw.lat-tile_bounds.ne.lat))
+							'gps-place': 'longitude: ' + (tile_bounds.sw.lng-(tile_bounds.sw.lng-tile_bounds.ne.lng)/2) + '; latitude: ' + (tile_bounds.sw.lat-(tile_bounds.sw.lat-tile_bounds.ne.lat)/2)
 						}));
-						ground.appendChild(ce('a-entity', {
+						/*ground.appendChild(ce('a-entity', {
 							id: tile_id+'_v',
 							geometry: 'primitive: plane; height: 84.5; width: 84.5',
 							//position: '0 0 0',
@@ -259,7 +259,7 @@ window.onload = function(){
 							material: 'shader: flat; src: url(' + tile_url + ')',
 							//'gps-place': 'latitude: ' + tile_bounds.ne.lat + '; longitude:' + tile_bounds.ne.lng
 							'gps-place': 'longitude: ' + tile_bounds.sw.lng + '; latitude: ' + tile_bounds.sw.lat
-						}));
+						}));*/
 					}
 					
 					

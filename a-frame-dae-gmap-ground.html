@@ -212,13 +212,26 @@ window.onload = function(){
 					var tile_bounds = MERCATOR.getTileBounds({x: xyz.x, y: xyz.y, z: tile_zoom});
 					
 					var tile_id = 'tile_'+xyz.x+'_'+xyz.y;
-					/*tile_width = gpsPosition.calcMeters(
-						this.cameraGpsPosition.zeroCrd,
+					tile_width = gpsPosition.calcMeters(
 						{
-							longitude: this.data.longitude,
-							latitude: this.cameraGpsPosition.zeroCrd.latitude
+							longitude: tile_bounds.ne.lng,
+							latitude: tile_bounds.ne.lat
+						},
+						{
+							longitude: tile_bounds.ne.lng,
+							latitude: tile_bounds.sw.lat
 						}
-					)*/
+					);
+					tile_height = gpsPosition.calcMeters(
+						{
+							longitude: tile_bounds.sw.lng,
+							latitude: tile_bounds.ne.lat
+						},
+						{
+							longitude: tile_bounds.ne.lng,
+							latitude: tile_bounds.ne.lat
+						}
+					);
 					/*
 					ne:
 					lat: 55.1451340140052
@@ -231,16 +244,16 @@ window.onload = function(){
 					if(!document.getElementById(tile_id)){
 						ground.appendChild(ce('a-entity', {
 							id: tile_id,
-							geometry: 'primitive: plane; height: 84.5; width: 84.5; displacement-bias: 0',
+							geometry: 'primitive: plane; height: 84.5; width: 84.5',
 							//position: '0 0 0',
 							rotation: '-90 0 0',
 							material: 'shader: flat; src: url(' + tile_url + ')',
 							//'gps-place': 'latitude: ' + tile_bounds.ne.lat + '; longitude:' + tile_bounds.ne.lng
-							'gps-place': 'longitude: ' + tile_bounds.sw.lng + '; latitude: ' + tile_bounds.sw.lat
+							'gps-place': 'longitude: ' + tile_bounds.sw.lng + '; latitude: ' + (tile_bounds.sw.lat+(tile_bounds.sw.lat-tile_bounds.ne.lat)/2)
 						}));
 						ground.appendChild(ce('a-entity', {
 							id: tile_id+'_v',
-							geometry: 'primitive: plane; height: 84.5; width: 84.5; displacement-bias: 0',
+							geometry: 'primitive: plane; height: 84.5; width: 84.5',
 							//position: '0 0 0',
 							//rotation: '-90 0 0',
 							material: 'shader: flat; src: url(' + tile_url + ')',

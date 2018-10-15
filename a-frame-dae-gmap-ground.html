@@ -212,7 +212,7 @@ window.onload = function(){
 					var tile_bounds = MERCATOR.getTileBounds({x: xyz.x, y: xyz.y, z: tile_zoom});
 					
 					var tile_id = 'tile_'+xyz.x+'_'+xyz.y;
-					tile_height = gpsPosition.calcMeters(
+					tile_width = gpsPosition.calcMeters(
 						{
 							longitude: tile_bounds.ne.lng,
 							latitude: tile_bounds.ne.lat
@@ -222,7 +222,7 @@ window.onload = function(){
 							latitude: tile_bounds.sw.lat
 						}
 					);
-					tile_width = gpsPosition.calcMeters(
+					tile_height = gpsPosition.calcMeters(
 						{
 							longitude: tile_bounds.sw.lng,
 							latitude: tile_bounds.ne.lat
@@ -244,7 +244,7 @@ window.onload = function(){
 					if(!document.getElementById(tile_id)){
 						ground.appendChild(ce('a-entity', {
 							id: tile_id,
-							geometry: 'primitive: plane; height: 84.5; width: 84.5',
+							geometry: 'primitive: plane; height: '+tile_height+'; width: '+tile_width,
 							//position: '0 0 0',
 							rotation: '-90 0 0',
 							material: 'shader: flat; src: url(' + tile_url + ')',

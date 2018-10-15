@@ -212,7 +212,7 @@ window.onload = function(){
 					var tile_bounds = MERCATOR.getTileBounds({x: xyz.x, y: xyz.y, z: tile_zoom});
 					
 					var tile_id = 'tile_'+xyz.x+'_'+xyz.y;
-					tile_width = gpsPosition.calcMeters(
+					tile_height = gpsPosition.calcMeters(
 						{
 							longitude: tile_bounds.ne.lng,
 							latitude: tile_bounds.ne.lat
@@ -222,7 +222,7 @@ window.onload = function(){
 							latitude: tile_bounds.sw.lat
 						}
 					);
-					tile_height = gpsPosition.calcMeters(
+					tile_width = gpsPosition.calcMeters(
 						{
 							longitude: tile_bounds.sw.lng,
 							latitude: tile_bounds.ne.lat

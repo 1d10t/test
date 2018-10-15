@@ -235,7 +235,7 @@ window.onload = function(){
 							//position: '0 0 0',
 							rotation: '-90 0 0',
 							material: 'shader: flat; src: url(' + tile_url + ')',
-							'gps-place': 'latitude: ' + tile_bounds.sw.lat + '; longitude:' + tile_bounds.sw.lng
+							'gps-place': 'latitude: ' + tile_bounds.ne.lat + '; longitude:' + tile_bounds.ne.lng
 						}));
 					}
 					
@@ -277,7 +277,7 @@ window.onload = function(){
 	
 	<a-scene fog="type: linear; color: #90b7ee; far: 220; near: 0;"><!--  -->
 		
-		<a-camera id="camera" user-height="10" gps-position compass-rotation>
+		<a-camera id="camera" user-height="1.6" position="0 25 0" gps-position compass-rotation>
 			<a-cursor></a-cursor>
 		</a-camera>
 		

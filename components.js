@@ -1,4 +1,10 @@
 AFRAME.registerComponent('transparent-texture', {
+	schema: {
+		alphaTest: {
+			type: 'number',
+			default: NaN
+		}
+	},
 	
 	init: function () {
 		this.applyToMesh();
@@ -13,7 +19,8 @@ AFRAME.registerComponent('transparent-texture', {
 				if ( child.isMesh )
 				{
 					child.material.transparent = true;
-					child.material.alphaTest = 0.5;
+					if(!isNaN(this.data.alphaTest))
+						child.material.alphaTest = this.data.alphaTest;
 				}
 			});
 	}

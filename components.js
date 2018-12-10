@@ -15,13 +15,14 @@ AFRAME.registerComponent('transparent-texture', {
 	
 	applyToMesh: function() {
 		const mesh = this.el.getObject3D('mesh');
+		var $this = this;
 		if (mesh)
 			mesh.traverse( function( child ) {
 				if ( child.isMesh )
 				{
 					child.material.transparent = true;
-					if(!isNaN(this.data.alphaTest))
-						child.material.alphaTest = this.data.alphaTest;
+					if(!isNaN($this.data.alphaTest))
+						child.material.alphaTest = $this.data.alphaTest;
 				}
 			});
 	}

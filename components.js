@@ -2,11 +2,12 @@ AFRAME.registerComponent('transparent-texture', {
 	schema: {
 		alphaTest: {
 			type: 'number',
-			default: NaN
+			default: 0.5
 		}
 	},
 	
 	init: function () {
+		this.data.alphaTest = parseFloat(this.data.alphaTest);
 		this.applyToMesh();
 		var $this = this;
 		this.el.addEventListener('model-loaded', function(){ return $this.applyToMesh(); });

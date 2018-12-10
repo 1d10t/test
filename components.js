@@ -37,6 +37,10 @@ AFRAME.registerComponent('gps-position', {
 	crd: null,
 	
 	schema: {
+		watch: {
+			type: 'boolean',
+			default: true
+		},
 		accuracy: {
 			type: 'int',
 			default: 100
@@ -60,6 +64,8 @@ AFRAME.registerComponent('gps-position', {
 		if(!isNaN(this.data.zeroCrdLatitude) && !isNaN(this.data.zeroCrdLongitude)){
 			this.zeroCrd = {latitude: this.data.zeroCrdLatitude, longitude: this.data.zeroCrdLongitude};
 		}
+		
+		if(!this.data.wath) return;
 		
 		this.watchId = this.watchGPS(function(position){
 			if(this.data.positionCallback.length)

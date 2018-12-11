@@ -302,6 +302,14 @@ AFRAME.registerComponent('gps-place', {
 	deferredInitInterval: 0,
 	
 	schema: {
+		offsetX: {
+			type: 'number',
+			default: 0
+		},
+		offsetY: {
+			type: 'number',
+			default: 0
+		},
 		latitude: {
 			type: 'number',
 			default: 0
@@ -352,7 +360,7 @@ AFRAME.registerComponent('gps-place', {
 		) * (
 			this.data.longitude > this.cameraGpsPosition.zeroCrd.longitude
 				? 1 : -1
-		);
+		) + this.data.offsetX;
 		p.z = this.cameraGpsPosition.calcMeters(
 			this.cameraGpsPosition.zeroCrd,
 			{
@@ -362,7 +370,7 @@ AFRAME.registerComponent('gps-place', {
 		) * (
 			this.data.latitude > this.cameraGpsPosition.zeroCrd.latitude
 				? -1 : 1
-		);
+		) + this.data.offsetY;
 		
 		this.el.setAttribute('position', p);
 		

@@ -148,6 +148,10 @@ AFRAME.registerComponent('compass-rotation', {
 	
 	
 	schema: {
+		watch: {
+			type: 'boolean',
+			default: true
+		},
 		fixTime: {
 			type: 'int',
 			default: 2000
@@ -189,8 +193,10 @@ AFRAME.registerComponent('compass-rotation', {
 	
 	tick: function (time, timeDelta) {
 		
-		if(this.heading === null
-		|| this.lastTimestamp > (time - this.data.fixTime)) return;
+		if(!this.data.watch
+		|| this.heading === null
+		|| this.lastTimestamp > (time - this.data.fixTime)
+		) return;
 		
 		this.lastTimestamp = time;
 		this.updateRotation();

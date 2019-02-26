@@ -140,10 +140,10 @@ function load_hash(d){
 		if(!document.getElementById(element_id)){
 			
 			fences.appendChild( ce(
-				'a-collada-model-legacy',
+				'e-entity',
 				{
 					'id': element_id,
-					'src': 'https://yaglov.ru/cadastre/fence.php?id='+encodeURIComponent(o.id),
+					'collada-model-legacy': 'src: https://yaglov.ru/cadastre/fence.php?id='+encodeURIComponent(o.id)
 					'gps-place': 'longitude: '+o.extent.xmin+'; latitude: '+o.extent.ymin,
 					'transparent-texture': '',
 					'data-cn': o.id

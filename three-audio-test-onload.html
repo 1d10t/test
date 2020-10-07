@@ -1,0 +1,40 @@
+<base href="https://threejs.org/examples/">
+<script type="module">
+	import * as THREE from '../build/three.module.js';
+
+  var scene, camera, renderer;
+
+  const init = () => {
+ 		var container = document.getElementById( 'container' );
+
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setClearColor( 0x000000 );
+    renderer.setPixelRatio( window.devicePixelRatio );
+    container.appendChild( renderer.domElement );
+
+    scene = new THREE.Scene();
+
+    camera = new THREE.Camera();
+
+  
+    // create an AudioListener and add it to the camera
+    var listener = new THREE.AudioListener();
+    camera.add( listener );
+
+    // create a global audio source
+    var sound = new THREE.Audio( listener );
+
+    // load a sound and set it as the Audio object's buffer
+    (new THREE.AudioLoader()).load( './sounds/376737_Skullbeatz___Bad_Cat_Maste.mp3', function( buffer ) {
+      sound.setBuffer( buffer );
+      sound.setLoop( true );
+      sound.setVolume( 1 );
+      sound.play();
+    });
+
+  }
+  
+  init()
+</script>
+<div id="container"></div>

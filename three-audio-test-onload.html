@@ -36,7 +36,7 @@
   }
   
   new Promise(rv => {
-    const a = ((a) => (a.href="#",a.text='do init',a.onclick=()=>(a.remove(),rv()),a))(document.createElement('a'));
+    const a = ((a) => (a.href="#",a.text='do init',a.onclick=()=>(a.remove(),rv(),false),a))(document.createElement('a'));
     document.body.append(a);
     a.click();
   }).then(init);

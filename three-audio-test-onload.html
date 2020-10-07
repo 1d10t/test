@@ -1,11 +1,11 @@
 <base href="https://threejs.org/examples/">
 <script type="module">
-	import * as THREE from '../build/three.module.js';
+  import * as THREE from '../build/three.module.js';
 
   var scene, camera, renderer;
 
   const init = () => {
- 		var container = document.getElementById( 'container' );
+    var container = document.getElementById( 'container' );
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -35,6 +35,9 @@
 
   }
   
-  init()
+  new Promise(rv => {
+    const a = (a) => (a.href="#",a.onclick=()=>(a.remove(),rv()),a)(document.createElement('a'));
+    document.body.appendChild(a);
+  }).then(init);
 </script>
 <div id="container"></div>
